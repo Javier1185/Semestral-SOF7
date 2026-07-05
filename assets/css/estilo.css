@@ -1,0 +1,232 @@
+:root {
+  --color-fondo: #f4f5f7;
+  --color-superficie: #ffffff;
+  --color-texto: #24262b;
+  --color-texto-suave: #6b6f76;
+  --color-borde: #e1e3e8;
+  --color-primario: #2f5d50;
+  --color-primario-oscuro: #23453b;
+  --color-error-fondo: #fdecec;
+  --color-error-texto: #a3312a;
+  --radio: 10px;
+  --sombra: 0 1px 3px rgba(0, 0, 0, 0.08);
+  font-size: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--color-fondo);
+  color: var(--color-texto);
+}
+
+a {
+  color: var(--color-primario);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Barra superior (header interno y público) ---------- */
+.barra-superior {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.5rem;
+  background: var(--color-superficie);
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.barra-superior .marca {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--color-primario-oscuro);
+}
+
+.info-usuario {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: var(--color-texto-suave);
+}
+
+.boton-login {
+  background: var(--color-primario);
+  color: #fff !important;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--radio);
+}
+
+/* ---------- Layout interno (sidebar + contenido) ---------- */
+.contenedor-principal {
+  display: flex;
+  min-height: calc(100vh - 60px);
+}
+
+.barra-lateral {
+  width: 220px;
+  background: var(--color-superficie);
+  border-right: 1px solid var(--color-borde);
+  padding: 1.2rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.barra-lateral a {
+  padding: 0.55rem 0.8rem;
+  border-radius: var(--radio);
+  color: var(--color-texto);
+}
+
+.barra-lateral a:hover {
+  background: var(--color-fondo);
+  text-decoration: none;
+}
+
+.contenido {
+  flex: 1;
+  padding: 1.8rem 2.2rem;
+}
+
+.pie-pagina {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.8rem;
+  color: var(--color-texto-suave);
+}
+
+/* ---------- Página de login ---------- */
+.pagina-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.caja-login {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 2.2rem 2.4rem;
+  width: 100%;
+  max-width: 360px;
+}
+
+.caja-login h1 {
+  margin: 0 0 0.2rem;
+  font-size: 1.3rem;
+  color: var(--color-primario-oscuro);
+}
+
+.caja-login .subtitulo {
+  margin: 0 0 1.2rem;
+  color: var(--color-texto-suave);
+  font-size: 0.9rem;
+}
+
+.caja-login label {
+  display: block;
+  font-size: 0.85rem;
+  margin-bottom: 0.3rem;
+  margin-top: 0.9rem;
+}
+
+.caja-login input {
+  width: 100%;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  font-size: 0.95rem;
+}
+
+.caja-login button {
+  width: 100%;
+  margin-top: 1.4rem;
+  padding: 0.65rem;
+  background: var(--color-primario);
+  color: #fff;
+  border: none;
+  border-radius: var(--radio);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.caja-login button:hover {
+  background: var(--color-primario-oscuro);
+}
+
+.enlace-volver {
+  display: block;
+  text-align: center;
+  margin-top: 1.1rem;
+  font-size: 0.85rem;
+}
+
+/* ---------- Alertas ---------- */
+.alerta {
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radio);
+  font-size: 0.85rem;
+  margin-bottom: 0.6rem;
+}
+
+.alerta-error {
+  background: var(--color-error-fondo);
+  color: var(--color-error-texto);
+}
+
+/* ---------- Página pública ---------- */
+.pagina-publica .hero {
+  max-width: 720px;
+  margin: 3rem auto 2rem;
+  padding: 0 1.5rem;
+  text-align: center;
+}
+
+.pagina-publica .hero h1 {
+  font-size: 1.8rem;
+  color: var(--color-primario-oscuro);
+}
+
+.pagina-publica .hero p {
+  color: var(--color-texto-suave);
+  line-height: 1.5;
+}
+
+.beneficios {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.2rem;
+  max-width: 900px;
+  margin: 0 auto 3rem;
+  padding: 0 1.5rem;
+}
+
+.beneficios .tarjeta {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  padding: 1.3rem;
+  box-shadow: var(--sombra);
+}
+
+.beneficios .tarjeta h2 {
+  font-size: 1.05rem;
+  margin: 0 0 0.4rem;
+  color: var(--color-primario-oscuro);
+}
+
+.beneficios .tarjeta p {
+  margin: 0;
+  color: var(--color-texto-suave);
+  font-size: 0.9rem;
+}
