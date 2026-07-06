@@ -5,17 +5,18 @@ class Conexion
     private static ?Conexion $instancia = null;
     private PDO $pdo;
 
-    // Datos de conexion. Ajusta segun tu entorno (XAMPP por defecto).
-    private string $host = 'localhost';
+    // Configuración de la base de datos
+    private string $host = '127.0.0.1';
     private string $baseDatos = 'sistema_contable';
     private string $usuario = 'root';
     private string $contrasena = '';
     private string $charset = 'utf8mb4';
+    private int $puerto = 3307;
 
-    // El constructor es privado: nadie puede hacer "new Conexion()" desde afuera.
+    // Constructor privado (Singleton)
     private function __construct()
     {
-        $dsn = "mysql:host={$this->host};dbname={$this->baseDatos};charset={$this->charset}";
+        $dsn = "mysql:host={$this->host};port={$this->puerto};dbname={$this->baseDatos};charset={$this->charset}";
 
         $opciones = [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -24,15 +25,22 @@ class Conexion
         ];
 
         try {
-            $this->pdo = new PDO($dsn, $this->usuario, $this->contrasena, $opciones);
+
+            $this->pdo = new PDO(
+                $dsn,
+                $this->usuario,
+                $this->contrasena,
+                $opciones
+            );
+
         } catch (PDOException $e) {
-            // No exponemos el error real al usuario final, solo lo registramos.
-            error_log('Error de conexion a la base de datos: ' . $e->getMessage());
-            die('No se pudo conectar a la base de datos.');
+
+            die('Error de conexión: ' . $e->getMessage());
+
         }
     }
 
-    // Punto de acceso unico a la instancia de Conexion.
+    // Obtiene la única instancia de la clase
     public static function obtenerInstancia(): Conexion
     {
         if (self::$instancia === null) {
@@ -42,17 +50,19 @@ class Conexion
         return self::$instancia;
     }
 
-    // Devuelve el objeto PDO listo para usarse en los modelos.
+    // Devuelve el objeto PDO
     public function obtenerPDO(): PDO
     {
         return $this->pdo;
     }
 
-    // Evita que la instancia se pueda clonar o deserializar (rompería el singleton).
+    // Evita clonar la instancia
     private function __clone() {}
 
+    // Evita deserializar la instancia
     public function __wakeup()
     {
         throw new Exception('No se puede deserializar un singleton.');
     }
 }
+?>
