@@ -1,0 +1,216 @@
+:root{
+    /* ==========================================
+       FONDOS
+       ========================================== */
+    --color-fondo: #F5F1EB;
+    --color-superficie: #FFFFFF;
+    --color-navbar: #FFFFFF;
+    /* ==========================================
+       SIDEBAR
+       ========================================== */
+    --color-sidebar: #102A43;
+    --color-sidebar-hover: #1B3B6F;
+    --color-sidebar-activo: #16395D;
+    --color-sidebar-texto: #F8FAFC;
+    /* ==========================================
+       COLORES PRINCIPALES
+       ========================================== */
+    --color-primario: #102A43;
+    --color-primario-hover: #1B3B6F;
+    --color-primario-oscuro: #081C33;
+    /* ==========================================
+       DORADOS
+       ========================================== */
+    --color-dorado: #B88A2A;
+    --color-dorado-hover: #C69A36;
+    --color-dorado-claro: #D9B45A;
+    /* ==========================================
+       TEXTO
+       ========================================== */
+    --color-texto: #243447;
+    --color-texto-suave: #6B7280;
+    --color-texto-claro: #9CA3AF;
+    /* ==========================================
+       BORDES
+       ========================================== */
+    --color-borde: #E5DDD2;
+    --color-borde-hover: #D8C9B2;
+    /* ==========================================
+       ESTADOS
+       ========================================== */
+    --color-success: #16A34A;
+    --color-warning: #F59E0B;
+    --color-danger: #DC2626;
+    --color-info: #2563EB;
+    /* ==========================================
+       EFECTOS
+       ========================================== */
+    --radio: 16px;
+    --radio-pequeno: 10px;
+    --sombra-suave: 0 8px 18px rgba(16,42,67,.08);
+    --sombra-media: 0 14px 28px rgba(16,42,67,.12);
+    --sombra-hover: 0 18px 36px rgba(16,42,67,.16);
+    --transicion: .25s ease;
+    --transicion-suave: .35s cubic-bezier(.4,0,.2,1);
+
+    font-size: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--color-fondo);
+  color: var(--color-texto);
+}
+
+a {
+  color: var(--color-dorado);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-dorado-hover);
+  text-decoration: underline;
+}
+
+/* =========================================================
+   PÁGINA DE LOGIN
+   ========================================================= */
+.pagina-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--color-primario-oscuro);
+  padding: 1.5rem;
+}
+
+.caja-login {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  box-shadow:
+    var(--sombra-media),
+    0 0 60px -20px rgba(184, 138, 42, 0.35);
+  padding: 3.2rem 3rem;
+  width: 100%;
+  max-width: 440px;
+}
+
+.caja-login h1 {
+  margin: 0 0 0.3rem;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--color-primario);
+  letter-spacing: -0.3px;
+}
+
+.caja-login .subtitulo {
+  margin: 0 0 1.8rem;
+  color: var(--color-texto-suave);
+  font-size: 0.95rem;
+}
+
+.caja-login label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  margin-top: 1.2rem;
+  color: var(--color-texto-suave);
+}
+
+.caja-login input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-pequeno);
+  font-size: 1rem;
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  transition: border-color var(--transicion), box-shadow var(--transicion);
+}
+
+.caja-login input::placeholder {
+  color: var(--color-texto-claro);
+}
+
+.caja-login input:focus {
+  outline: none;
+  border-color: var(--color-dorado);
+  box-shadow: 0 0 0 3px rgba(184, 138, 42, 0.15);
+}
+
+.caja-login button {
+  width: 100%;
+  margin-top: 2rem;
+  padding: 0.9rem;
+  background: var(--color-primario);
+  color: var(--color-sidebar-texto);
+  border: none;
+  border-radius: var(--radio-pequeno);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transicion-suave), color var(--transicion-suave), transform 0.15s ease;
+}
+
+.caja-login button:hover {
+  background: var(--color-dorado);
+  color: var(--color-primario-oscuro);
+}
+
+.caja-login button:active {
+  transform: scale(0.98);
+}
+
+.enlace-volver {
+  display: block;
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--color-texto-suave);
+}
+
+.enlace-volver:hover {
+  color: var(--color-dorado);
+}
+
+/* ---------- Alertas ---------- */
+.alerta {
+  padding: 0.7rem 0.9rem;
+  border-radius: var(--radio-pequeno);
+  font-size: 0.85rem;
+  margin-bottom: 0.8rem;
+  border: 1px solid transparent;
+}
+
+.alerta-error {
+  background: rgba(220, 38, 38, 0.08);
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+/* =========================================================
+   FONDO ANIMADO: PARTÍCULAS (con líneas de conexión)
+   ========================================================= */
+.pagina-login.fondo-particulas {
+  position: relative;
+  overflow: hidden;
+}
+
+.fondo-particulas #particles-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.fondo-particulas .caja-login {
+  position: relative;
+  z-index: 2;
+}

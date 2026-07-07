@@ -1,16 +1,76 @@
-:root {
-  --color-fondo: #f4f5f7;
-  --color-superficie: #ffffff;
-  --color-texto: #24262b;
-  --color-texto-suave: #6b6f76;
-  --color-borde: #e1e3e8;
-  --color-primario: #2f5d50;
-  --color-primario-oscuro: #23453b;
-  --color-error-fondo: #fdecec;
-  --color-error-texto: #a3312a;
-  --radio: 10px;
-  --sombra: 0 1px 3px rgba(0, 0, 0, 0.08);
-  font-size: 16px;
+:root{
+    /* ==========================================
+       FONDOS
+       ========================================== */
+    /* Fondo general (crema elegante) */
+    --color-fondo: #F5F1EB;
+    /* Tarjetas */
+    --color-superficie: #FFFFFF;
+    /* Navbar */
+    --color-navbar: #FFFFFF;
+    /* ==========================================
+       SIDEBAR
+       ========================================== */
+    /* Azul marino principal */
+    --color-sidebar: #102A43;
+    /* Hover del menú */
+    --color-sidebar-hover: #1B3B6F;
+    /* Menú activo */
+    --color-sidebar-activo: #16395D;
+    /* Texto del sidebar */
+    --color-sidebar-texto: #F8FAFC;
+    /* ==========================================
+       COLORES PRINCIPALES
+       ========================================== */
+    /* Azul principal */
+    --color-primario: #102A43;
+    /* Hover */
+    --color-primario-hover: #1B3B6F;
+    /* Azul más oscuro */
+    --color-primario-oscuro: #081C33;
+    /* ==========================================
+       DORADOS
+       ========================================== */
+    /* Oro mate */
+    --color-dorado: #B88A2A;
+    /* Hover */
+    --color-dorado-hover: #C69A36;
+    /* Oro claro */
+    --color-dorado-claro: #D9B45A;
+    /* ==========================================
+       TEXTO
+       ========================================== */
+    --color-texto: #243447;
+    --color-texto-suave: #6B7280;
+    --color-texto-claro: #9CA3AF;
+    /* ==========================================
+       BORDES
+       ========================================== */
+    --color-borde: #E5DDD2;
+    --color-borde-hover: #D8C9B2;
+    /* ==========================================
+       ESTADOS
+       ========================================== */
+    --color-success: #16A34A;
+    --color-warning: #F59E0B;
+    --color-danger: #DC2626;
+    --color-info: #2563EB;
+    /* ==========================================
+       EFECTOS
+       ========================================== */
+    --radio: 16px;
+    --radio-pequeno: 10px;
+    --sombra-suave: 0 8px 18px rgba(16,42,67,.08);
+    --sombra-media: 0 14px 28px rgba(16,42,67,.12);
+    --sombra-hover: 0 18px 36px rgba(16,42,67,.16);
+    --transicion: .25s ease;
+    --transicion-suave: .35s cubic-bezier(.4,0,.2,1);
+
+    font-size: 16px;
+}
+
+html, body {
+  height: 100%;
 }
 
 * {
@@ -19,34 +79,42 @@
 
 body {
   margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   font-family: "Segoe UI", Arial, sans-serif;
   background: var(--color-fondo);
   color: var(--color-texto);
 }
 
 a {
-  color: var(--color-primario);
+  color: var(--color-dorado);
   text-decoration: none;
 }
 
 a:hover {
+  color: var(--color-dorado-hover);
   text-decoration: underline;
 }
 
 /* ---------- Barra superior (header interno y público) ---------- */
 .barra-superior {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0.9rem 1.5rem;
-  background: var(--color-superficie);
+  background: var(--color-navbar);
   border-bottom: 1px solid var(--color-borde);
+  box-shadow: var(--sombra-suave);
 }
 
 .barra-superior .marca {
   font-weight: 600;
   font-size: 1.1rem;
-  color: var(--color-primario-oscuro);
+  color: var(--color-primario);
 }
 
 .info-usuario {
@@ -59,36 +127,79 @@ a:hover {
 
 .boton-login {
   background: var(--color-primario);
-  color: #fff !important;
+  color: var(--color-sidebar-texto) !important;
   padding: 0.5rem 1.1rem;
-  border-radius: var(--radio);
+  border-radius: var(--radio-pequeno);
+  transition: background var(--transicion);
+}
+
+.boton-login:hover {
+  background: var(--color-dorado);
+  color: var(--color-sidebar-texto) !important;
 }
 
 /* ---------- Layout interno (sidebar + contenido) ---------- */
 .contenedor-principal {
   display: flex;
-  min-height: calc(100vh - 60px);
+  flex: 1 1 auto;
 }
 
 .barra-lateral {
   width: 220px;
-  background: var(--color-superficie);
-  border-right: 1px solid var(--color-borde);
+  background: var(--color-sidebar);
+  border-right: 1px solid var(--color-primario-oscuro);
   padding: 1.2rem 0.8rem;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0;
 }
 
 .barra-lateral a {
-  padding: 0.55rem 0.8rem;
-  border-radius: var(--radio);
-  color: var(--color-texto);
+  position: relative;
+  padding: 0.7rem 0.8rem;
+  border-radius: var(--radio-pequeno);
+  color: var(--color-sidebar-texto);
+  border-bottom: 1px solid rgba(184, 138, 42, 0.18);
+  overflow: hidden;
+  transition: background var(--transicion-suave), color var(--transicion-suave), padding-left var(--transicion-suave);
+}
+
+.barra-lateral a:last-child {
+  border-bottom: none;
+}
+
+/* Barrita dorada que crece desde el centro al pasar el cursor */
+.barra-lateral a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 3px;
+  background: var(--color-dorado);
+  transform: scaleY(0);
+  transition: transform var(--transicion-suave);
 }
 
 .barra-lateral a:hover {
-  background: var(--color-fondo);
+  background: rgba(184, 138, 42, 0.12);
+  color: var(--color-dorado-claro);
+  padding-left: 1.2rem;
   text-decoration: none;
+}
+
+.barra-lateral a:hover::before {
+  transform: scaleY(1);
+}
+
+.barra-lateral a.activo {
+  background: rgba(184, 138, 42, 0.18);
+  color: var(--color-dorado-claro);
+  padding-left: 1.2rem;
+}
+
+.barra-lateral a.activo::before {
+  transform: scaleY(1);
 }
 
 .contenido {
@@ -98,90 +209,44 @@ a:hover {
 
 .pie-pagina {
   text-align: center;
-  padding: 1rem;
-  font-size: 0.8rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
   color: var(--color-texto-suave);
-}
-
-/* ---------- Página de login ---------- */
-.pagina-login {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-}
-
-.caja-login {
   background: var(--color-superficie);
-  border: 1px solid var(--color-borde);
-  border-radius: var(--radio);
-  box-shadow: var(--sombra);
-  padding: 2.2rem 2.4rem;
-  width: 100%;
-  max-width: 360px;
-}
-
-.caja-login h1 {
-  margin: 0 0 0.2rem;
-  font-size: 1.3rem;
-  color: var(--color-primario-oscuro);
-}
-
-.caja-login .subtitulo {
-  margin: 0 0 1.2rem;
-  color: var(--color-texto-suave);
-  font-size: 0.9rem;
-}
-
-.caja-login label {
-  display: block;
-  font-size: 0.85rem;
-  margin-bottom: 0.3rem;
-  margin-top: 0.9rem;
-}
-
-.caja-login input {
-  width: 100%;
-  padding: 0.6rem 0.7rem;
-  border: 1px solid var(--color-borde);
-  border-radius: var(--radio);
-  font-size: 0.95rem;
-}
-
-.caja-login button {
-  width: 100%;
-  margin-top: 1.4rem;
-  padding: 0.65rem;
-  background: var(--color-primario);
-  color: #fff;
-  border: none;
-  border-radius: var(--radio);
-  font-size: 0.95rem;
-  cursor: pointer;
-}
-
-.caja-login button:hover {
-  background: var(--color-primario-oscuro);
-}
-
-.enlace-volver {
-  display: block;
-  text-align: center;
-  margin-top: 1.1rem;
-  font-size: 0.85rem;
+  border-top: 1px solid var(--color-borde);
 }
 
 /* ---------- Alertas ---------- */
 .alerta {
   padding: 0.6rem 0.8rem;
-  border-radius: var(--radio);
+  border-radius: var(--radio-pequeno);
   font-size: 0.85rem;
   margin-bottom: 0.6rem;
+  border: 1px solid transparent;
 }
 
 .alerta-error {
-  background: var(--color-error-fondo);
-  color: var(--color-error-texto);
+  background: rgba(220, 38, 38, 0.1);
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+.alerta-exito {
+  background: rgba(22, 163, 74, 0.1);
+  color: var(--color-success);
+  border-color: var(--color-success);
+}
+
+.alerta-advertencia {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--color-warning);
+  border-color: var(--color-warning);
+}
+
+.alerta-info {
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--color-info);
+  border-color: var(--color-info);
 }
 
 /* ---------- Página pública ---------- */
@@ -194,7 +259,7 @@ a:hover {
 
 .pagina-publica .hero h1 {
   font-size: 1.8rem;
-  color: var(--color-primario-oscuro);
+  color: var(--color-primario);
 }
 
 .pagina-publica .hero p {
@@ -216,13 +281,19 @@ a:hover {
   border: 1px solid var(--color-borde);
   border-radius: var(--radio);
   padding: 1.3rem;
-  box-shadow: var(--sombra);
+  box-shadow: var(--sombra-suave);
+  transition: border-color var(--transicion), box-shadow var(--transicion);
+}
+
+.beneficios .tarjeta:hover {
+  border-color: var(--color-dorado);
+  box-shadow: var(--sombra-hover);
 }
 
 .beneficios .tarjeta h2 {
   font-size: 1.05rem;
   margin: 0 0 0.4rem;
-  color: var(--color-primario-oscuro);
+  color: var(--color-primario);
 }
 
 .beneficios .tarjeta p {
