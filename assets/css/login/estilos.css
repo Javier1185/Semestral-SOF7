@@ -90,15 +90,18 @@ a:hover {
 }
 
 .caja-login {
-  background: var(--color-superficie);
-  border: 1px solid var(--color-borde);
-  border-radius: var(--radio);
+  background: rgba(255,255,255,.96);
+  backdrop-filter: blur(12px);
+
+  border: 1px solid rgba(184,138,42,.25);
+
+  border-radius: 22px;
+
   box-shadow:
-    var(--sombra-media),
-    0 0 60px -20px rgba(184, 138, 42, 0.35);
-  padding: 3.2rem 3rem;
-  width: 100%;
-  max-width: 440px;
+      0 25px 60px rgba(0,0,0,.18),
+      0 0 40px rgba(184,138,42,.12);
+
+  padding: 3rem;
 }
 
 .caja-login h1 {
@@ -107,12 +110,15 @@ a:hover {
   font-weight: 700;
   color: var(--color-primario);
   letter-spacing: -0.3px;
+  text-align:center;
+    margin-bottom:.3rem;
 }
 
 .caja-login .subtitulo {
   margin: 0 0 1.8rem;
   color: var(--color-texto-suave);
   font-size: 0.95rem;
+   text-align:center;
 }
 
 .caja-login label {
@@ -140,9 +146,12 @@ a:hover {
 }
 
 .caja-login input:focus {
-  outline: none;
-  border-color: var(--color-dorado);
-  box-shadow: 0 0 0 3px rgba(184, 138, 42, 0.15);
+   border-color:var(--color-dorado);
+
+    background:white;
+
+    box-shadow:
+    0 0 0 4px rgba(184,138,42,.12);
 }
 
 .caja-login button {
