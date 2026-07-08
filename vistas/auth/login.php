@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Iniciar sesión - Sistema Contable</title>
-    <link rel="stylesheet" href="../assets/css/login/estilos.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/login/estilos.css">
 </head>
 <body class="pagina-login fondo-particulas">
 
@@ -27,10 +27,10 @@
             <button type="submit">Entrar</button>
         </form>
 
-        <a class="enlace-volver" href="../vistas/publico/landing.php">Volver al inicio</a>
+        <a class="enlace-volver" href="<?= BASE_URL ?>/vistas/publico/landing.php">Volver al inicio</a>
     </div>
 
-    <script src="../assets/css/login/particulas1.js"></script>
-    <script src="../assets/js/Validaciones.js"></script>
+    <script src="<?= BASE_URL ?>/assets/css/login/particulas1.js"></script>
+    <script src="<?= BASE_URL ?>/assets/js/Validaciones.js"></script>
 </body>
 </html> 

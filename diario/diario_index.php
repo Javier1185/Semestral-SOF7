@@ -21,16 +21,8 @@ $diarios = $pdo->query($sql)->fetchAll();
 
 ?>
 
-<!DOCTYPE html>
-
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>Diario General</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-
-<body>
+<?php require_once '../vistas/layout/header.php'; ?>
+<?php require_once '../vistas/layout/sidebar.php'; ?>
 
 <div class="container mt-4">
 
@@ -72,6 +64,10 @@ href="diario_ver.php?id=<?= $d['id'] ?>"
 class="btn btn-info btn-sm">
 Ver </a>
 
+<a href="bitacora/bitacora_index.php" class="btn btn-info">
+    Ver Bitácora
+</a>
+
 </td>
 
 </tr>
@@ -84,5 +80,4 @@ Ver </a>
 
 </div>
 
-</body>
-</html>
+<?php require_once '../vistas/layout/footer.php'; ?>

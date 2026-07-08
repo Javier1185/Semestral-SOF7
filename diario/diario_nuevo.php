@@ -13,17 +13,10 @@ ORDER BY codigo
 
 ?>
 
-<!DOCTYPE html>
+<?php require_once '../vistas/layout/header.php'; ?>
+<?php require_once '../vistas/layout/sidebar.php'; ?>
 
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>Nuevo Asiento</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<script>
-function agregarFila(){
+<div class="container mt-4">
 
 const tabla =
 document.getElementById("detalle");
@@ -179,5 +172,4 @@ Guardar Asiento </button>
 
 </div>
 
-</body>
-</html>
+<?php require_once '../vistas/layout/footer.php'; ?>

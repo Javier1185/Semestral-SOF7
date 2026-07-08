@@ -10,11 +10,11 @@ require_once __DIR__ . '/../config/Conexion.php';
 class Bitacora
 {
     public static function registrar(
-        ?int $usuarioId,
-        string $accion,
-        ?string $tabla = null,
-        ?int $registroId = null,
-        ?string $detalle = null
+        $usuarioId,
+        $accion,
+        $tabla = null,
+        $registroId = null,
+        $detalle = null
     ): void {
         $pdo = Conexion::obtenerInstancia()->obtenerPDO();
 

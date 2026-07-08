@@ -1,17 +1,5 @@
-<?php
-?>
-
-<!DOCTYPE html>
-
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>Nueva Cuenta</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-
-<body>
+<?php require_once '../vistas/layout/header.php'; ?>
+<?php require_once '../vistas/layout/sidebar.php'; ?>
 
 <div class="container mt-4">
 
@@ -45,13 +33,11 @@
  class="form-control"
  required>
 
-```
 <option value="1">Activo</option>
 <option value="2">Pasivo</option>
 <option value="3">Patrimonio</option>
 <option value="4">Ingresos</option>
 <option value="5">Gastos</option>
-```
 
 </select>
 
@@ -69,5 +55,4 @@ Volver
 
 </div>
 
-</body>
-</html>
+<?php require_once '../vistas/layout/footer.php'; ?>

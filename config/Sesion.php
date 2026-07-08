@@ -35,7 +35,7 @@ class Sesion
     }
 
     // Devuelve los datos del usuario actual, o null si nadie ha iniciado sesión.
-    public static function usuarioActual(): ?array
+    public static function usuarioActual()
     {
         self::iniciar();
         if (!self::estaLogueado()) {
