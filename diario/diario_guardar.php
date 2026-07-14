@@ -16,14 +16,28 @@ $totalDebito = array_sum($debitos);
 $totalCredito = array_sum($creditos);
 
 if ($totalDebito != $totalCredito) {
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
 
-    die("
-    <h2>
-    Error:
-    El total Débito debe ser igual al total Crédito.
-    </h2>
-    ");
+<script>
+Swal.fire({
+    icon: 'error',
+    title: 'Error',
+    text: 'El total Débito debe ser igual al total Crédito'
+}).then(() => {
+    window.history.back();
+});
+</script>
 
+</body>
+</html>
+<?php
+exit;
 }
 
 /*
@@ -87,7 +101,6 @@ try {
         ]);
     }
 
-    // Registrar en bitácora
     Bitacora::registrar(
         $usuarioId,
         'crear',
@@ -97,14 +110,51 @@ try {
     );
 
     $pdo->commit();
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
 
-    header("Location: diario_index.php");
-    exit;
+<script>
+Swal.fire({
+    icon: 'success',
+    title: 'Guardado',
+    text: 'Asiento registrado correctamente'
+}).then(() => {
+    window.location.href = 'diario_index.php';
+});
+</script>
+
+</body>
+</html>
+<?php
 
 } catch (Exception $e) {
 
     $pdo->rollBack();
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
 
-    die($e->getMessage());
+<script>
+Swal.fire({
+    icon: 'error',
+    title: 'Error del sistema',
+    text: <?= json_encode($e->getMessage()) ?>
+}).then(() => {
+    window.history.back();
+});
+</script>
+
+</body>
+</html>
+<?php
 }
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-require_once '../config/conexion.php';
+require_once '../config/Conexion.php';
 
 $pdo = Conexion::obtenerInstancia()->obtenerPDO();
 
@@ -26,57 +26,68 @@ $diarios = $pdo->query($sql)->fetchAll();
 
 <div class="container mt-4">
 
-<h2>Diario General</h2>
+    <div class="d-flex justify-content-between align-items-center mb-3">
 
-<a href="diario_nuevo.php" class="btn btn-primary mb-3">
-Nuevo Asiento
-</a>
+        <h2>Diario General</h2>
 
-<table class="table table-bordered">
+        <div>
+            <a href="diario_nuevo.php" class="btn btn-primary">
+                Nuevo Asiento
+            </a>
 
-<thead>
-<tr>
-<th>ID</th>
-<th>Fecha</th>
-<th>Descripción</th>
-<th>Usuario</th>
-<th>Estado</th>
-<th>Acciones</th>
-</tr>
-</thead>
+            <a href="../bitacora/bitacora_index.php" class="btn btn-info">
+                Ver Bitácora
+            </a>
+        </div>
 
-<tbody>
+    </div>
 
-<?php foreach($diarios as $d): ?>
+    <table class="table table-bordered table-hover">
 
-<tr>
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Descripción</th>
+                <th>Usuario</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
 
-<td><?= $d['id'] ?></td>
-<td><?= $d['fecha'] ?></td>
-<td><?= htmlspecialchars($d['descripcion']) ?></td>
-<td><?= htmlspecialchars($d['usuario']) ?></td>
-<td><?= htmlspecialchars($d['estado']) ?></td>
+        <tbody>
 
-<td>
+        <?php foreach($diarios as $d): ?>
 
-<a
-href="diario_ver.php?id=<?= $d['id'] ?>"
-class="btn btn-info btn-sm">
-Ver </a>
+            <tr>
 
-<a href="bitacora/bitacora_index.php" class="btn btn-info">
-    Ver Bitácora
-</a>
+                <td><?= $d['id'] ?></td>
 
-</td>
+                <td><?= htmlspecialchars($d['fecha']) ?></td>
 
-</tr>
+                <td><?= htmlspecialchars($d['descripcion']) ?></td>
 
-<?php endforeach; ?>
+                <td><?= htmlspecialchars($d['usuario']) ?></td>
 
-</tbody>
+                <td><?= htmlspecialchars($d['estado']) ?></td>
 
-</table>
+                <td>
+
+                    <a
+                        href="diario_ver.php?id=<?= $d['id'] ?>"
+                        class="btn btn-info btn-sm">
+                        Ver
+                    </a>
+
+                </td>
+
+            </tr>
+
+        <?php endforeach; ?>
+
+        </tbody>
+
+    </table>
 
 </div>
 
