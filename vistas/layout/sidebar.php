@@ -6,23 +6,23 @@ require_once __DIR__ . '/../../config/Sesion.php';
     <a href="<?= BASE_URL ?>/index.php">Inicio</a>
 
     <?php if (Sesion::tieneAcceso('usuarios')): ?>
-        <a href="<?= BASE_URL ?>/controladores/UsuarioController.php">Usuarios</a>
+        <a href="<?= BASE_URL ?>/Controladores/UsuarioController.php">Usuarios</a>
     <?php endif; ?>
 
     <?php if (Sesion::tieneAcceso('roles')): ?>
-        <a href="<?= BASE_URL ?>/controladores/RolController.php">Roles y permisos</a>
+        <a href="<?= BASE_URL ?>/Controladores/RolController.php">Roles y permisos</a>
     <?php endif; ?>
 
     <?php if (Sesion::tieneAcceso('cuentas')): ?>
-        <a href="<?= BASE_URL ?>/controladores/CuentaController.php">Catálogo de cuentas</a>
+        <a href="<?= BASE_URL ?>/Controladores/CuentaController.php">Catálogo de cuentas</a>
     <?php endif; ?>
 
     <?php if (Sesion::tieneAcceso('diario')): ?>
-        <a href="<?= BASE_URL ?>/controladores/DiarioController.php">Diario general</a>
+        <a href="<?= BASE_URL ?>/Controladores/DiarioController.php">Diario general</a>
     <?php endif; ?>
 
     <?php if (Sesion::tieneAcceso('informes')): ?>
-        <a href="<?= BASE_URL ?>/controladores/InformeController.php">Informes</a>
+        <a href="<?= BASE_URL ?>/Controladores/InformeController.php">Informes</a>
     <?php endif; ?>
 </nav>
 

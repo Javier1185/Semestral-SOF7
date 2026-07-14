@@ -41,7 +41,7 @@ class Conexion
 
         return self::$instancia;
     }
-
+    
     // Devuelve el objeto PDO listo para usarse en los modelos.
     public function obtenerPDO(): PDO
     {
