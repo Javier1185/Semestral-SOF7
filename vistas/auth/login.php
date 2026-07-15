@@ -18,6 +18,8 @@
         <?php endif; ?>
 
         <form method="POST" action="AuthController.php">
+            <?= Csrf::campoFormulario() ?>
+
             <label for="correo">Correo</label>
             <input type="email" id="correo" name="correo" required autofocus>
 

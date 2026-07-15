@@ -1,130 +1,112 @@
 <?php
 
 require_once '../config/Conexion.php';
+require_once '../config/Sesion.php';
+require_once '../config/config.php';
+/*
+Sesion::iniciar();
+
+if (!Sesion::estaLogueado()) {
+    header('Location: ' . BASE_URL . '/vistas/auth/login.php');
+    exit;
+}
+    */
 
 $pdo = Conexion::obtenerInstancia()->obtenerPDO();
 
 $sql = "
 SELECT
-    b.*,
+    b.id,
+    b.fecha,
+    b.accion,
+    b.tabla_afectada,
+    b.registro_id,
+    b.detalle,
+    b.ip_address,
     u.nombre AS usuario
 FROM bitacora b
 LEFT JOIN usuarios u
-    ON b.usuario_id = u.id
+ON b.usuario_id = u.id
 ORDER BY b.fecha DESC
 ";
 
-$stmt = $pdo->query($sql);
+$bitacora = $pdo->query($sql)->fetchAll();
 
-$registros = $stmt->fetchAll();
+include '../vistas/layout/header.php';
+include '../vistas/layout/sidebar.php';
+
 ?>
 
-<?php require_once '../vistas/layout/header.php'; ?>
-<?php require_once '../vistas/layout/sidebar.php'; ?>
+<h2>Bitácora del Sistema</h2>
 
-<div class="container mt-4">
+<table style="width:100%;border-collapse:collapse;background:white;box-shadow:var(--sombra-suave);">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <thead style="background:var(--color-primario);color:white;">
 
-        <h2>Bitácora del Sistema</h2>
+        <tr>
 
-        <a href="../index.php" class="btn btn-secondary">
-            Volver
-        </a>
+            <th style="padding:10px;">Fecha</th>
 
-    </div>
+            <th>Usuario</th>
 
-    <div class="card">
+            <th>Acción</th>
 
-        <div class="card-body">
+            <th>Tabla</th>
 
-            <div class="table-responsive">
+            <th>Registro</th>
 
-                <table class="table table-bordered table-hover">
+            <th>Detalle</th>
 
-                    <thead class="table-dark">
+            <th>IP</th>
 
-                        <tr>
-                            <th>ID</th>
-                            <th>Usuario</th>
-                            <th>Acción</th>
-                            <th>Tabla</th>
-                            <th>Registro</th>
-                            <th>Detalle</th>
-                            <th>IP</th>
-                            <th>Fecha</th>
-                        </tr>
+        </tr>
 
-                    </thead>
+    </thead>
 
-                    <tbody>
+    <tbody>
 
-                    <?php if(count($registros) > 0): ?>
+    <?php foreach($bitacora as $fila): ?>
 
-                        <?php foreach($registros as $fila): ?>
+        <tr style="border-bottom:1px solid #ddd;">
 
-                        <tr>
+            <td style="padding:10px;">
+                <?= $fila['fecha'] ?>
+            </td>
 
-                            <td>
-                                <?= $fila['id'] ?>
-                            </td>
+            <td>
+                <?= htmlspecialchars($fila['usuario'] ?? 'Sistema') ?>
+            </td>
 
-                            <td>
-                                <?= htmlspecialchars($fila['usuario'] ?? 'Sistema') ?>
-                            </td>
+            <td>
+                <?= htmlspecialchars($fila['accion']) ?>
+            </td>
 
-                            <td>
-                                <?= htmlspecialchars($fila['accion']) ?>
-                            </td>
+            <td>
+                <?= htmlspecialchars($fila['tabla_afectada']) ?>
+            </td>
 
-                            <td>
-                                <?= htmlspecialchars($fila['tabla_afectada']) ?>
-                            </td>
+            <td>
+                <?= $fila['registro_id'] ?>
+            </td>
 
-                            <td>
-                                <?= htmlspecialchars($fila['registro_id']) ?>
-                            </td>
+            <td>
+                <?= htmlspecialchars($fila['detalle']) ?>
+            </td>
 
-                            <td>
-                                <?= htmlspecialchars($fila['detalle']) ?>
-                            </td>
+            <td>
+                <?= htmlspecialchars($fila['ip_address']) ?>
+            </td>
 
-                            <td>
-                                <?= htmlspecialchars($fila['ip_address']) ?>
-                            </td>
+        </tr>
 
-                            <td>
-                                <?= htmlspecialchars($fila['fecha']) ?>
-                            </td>
+    <?php endforeach; ?>
 
-                        </tr>
+    </tbody>
 
-                        <?php endforeach; ?>
+</table>
 
-                    <?php else: ?>
+</main>
 
-                        <tr>
-
-                            <td colspan="8" class="text-center">
-
-                                No existen registros en la bitácora.
-
-                            </td>
-
-                        </tr>
-
-                    <?php endif; ?>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<?php require_once '../vistas/layout/footer.php'; ?>
+<?php
+include '../vistas/layout/footer.php';
+?>
