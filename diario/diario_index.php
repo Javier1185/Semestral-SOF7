@@ -1,48 +1,57 @@
 <?php
+require_once '../config/Conexion.php';
 
-require_once '../config/conexion.php';
+try {
 
-$pdo = Conexion::obtenerInstancia()->obtenerPDO();
+    $pdo = Conexion::obtenerInstancia()->obtenerPDO();
 
-$sql = "
-SELECT
-    d.id,
-    d.fecha,
-    d.descripcion,
-    d.estado,
-    u.nombre AS usuario
-FROM diario d
-INNER JOIN usuarios u
-ON d.usuario_id = u.id
-ORDER BY d.fecha DESC
-";
+    $sql = "SELECT
+                d.id,
+                d.fecha,
+                d.descripcion,
+                d.estado,
+                u.nombre AS usuario
+            FROM diario d
+            LEFT JOIN usuarios u
+                ON d.usuario_id = u.id
+            ORDER BY d.fecha DESC";
 
-$diarios = $pdo->query($sql)->fetchAll();
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
 
+    $diarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+} catch (PDOException $e) {
+    die("Error: " . $e->getMessage());
+}
+
+require_once '../vistas/layout/header.php';
+require_once '../vistas/layout/sidebar.php';
 ?>
-
-<!DOCTYPE html>
-
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>Diario General</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-
-<body>
 
 <div class="container mt-4">
 
+<div class="d-flex justify-content-between align-items-center mb-3">
+
 <h2>Diario General</h2>
 
-<a href="diario_nuevo.php" class="btn btn-primary mb-3">
+<div>
+
+<a href="diario_nuevo.php" class="btn btn-primary">
 Nuevo Asiento
 </a>
 
-<table class="table table-bordered">
+<a href="../bitacora/bitacora_index.php" class="btn btn-info">
+Ver Bitácora
+</a>
 
-<thead>
+</div>
+
+</div>
+
+<table class="table table-bordered table-hover">
+
+<thead class="table-dark">
 <tr>
 <th>ID</th>
 <th>Fecha</th>
@@ -55,22 +64,27 @@ Nuevo Asiento
 
 <tbody>
 
+<?php if(count($diarios)>0): ?>
+
 <?php foreach($diarios as $d): ?>
 
 <tr>
 
 <td><?= $d['id'] ?></td>
-<td><?= $d['fecha'] ?></td>
+
+<td><?= htmlspecialchars($d['fecha']) ?></td>
+
 <td><?= htmlspecialchars($d['descripcion']) ?></td>
-<td><?= htmlspecialchars($d['usuario']) ?></td>
+
+<td><?= htmlspecialchars($d['usuario'] ?? '') ?></td>
+
 <td><?= htmlspecialchars($d['estado']) ?></td>
 
 <td>
 
-<a
-href="diario_ver.php?id=<?= $d['id'] ?>"
-class="btn btn-info btn-sm">
-Ver </a>
+<a href="diario_ver.php?id=<?= $d['id'] ?>" class="btn btn-info btn-sm">
+Ver
+</a>
 
 </td>
 
@@ -78,11 +92,20 @@ Ver </a>
 
 <?php endforeach; ?>
 
+<?php else: ?>
+
+<tr>
+<td colspan="6" class="text-center">
+No existen asientos registrados.
+</td>
+</tr>
+
+<?php endif; ?>
+
 </tbody>
 
 </table>
 
 </div>
 
-</body>
-</html>
+<?php require_once '../vistas/layout/footer.php'; ?>

@@ -1,6 +1,7 @@
 <?php
 
-require_once '../config/conexion.php';
+require_once '../config/Conexion.php';
+require_once '../modelos/Bitacora.php';
 
 $pdo = Conexion::obtenerInstancia()->obtenerPDO();
 
@@ -11,7 +12,7 @@ $clase = $_POST['clase'];
 /*
 Usuario temporal.
 Cuando exista login reemplazar por:
-$_SESSION['usuario_id']
+$usuarioId = $_SESSION['usuario_id'];
 */
 $usuarioId = 2;
 
@@ -40,6 +41,18 @@ $stmt->execute([
     $clase,
     $usuarioId
 ]);
+
+// Obtener el ID de la cuenta recién creada
+$idCuenta = $pdo->lastInsertId();
+
+// Registrar en bitácora
+Bitacora::registrar(
+    $usuarioId,
+    'crear',
+    'cuentas',
+    $idCuenta,
+    "Cuenta creada: {$codigo} - {$nombre}"
+);
 
 header('Location: cuentas_index.php');
 exit;

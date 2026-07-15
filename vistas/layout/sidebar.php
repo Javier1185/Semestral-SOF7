@@ -1,27 +1,26 @@
 <?php
 require_once __DIR__ . '/../../config/config.php';
-require_once __DIR__ . '/../../config/Sesion.php';
 ?>
 
 <nav class="barra-lateral">
 
     <a href="<?= BASE_URL ?>/index.php">Inicio</a>
 
-    <?php if (Sesion::tieneAcceso('usuarios')): ?>
-        <a href="<?= BASE_URL ?>/usuarios/usuarios_index.php">Usuarios</a>
-    <?php endif; ?>
+    <a href="<?= BASE_URL ?>/usuarios/usuarios_index.php">
+        Usuarios
+    </a>
 
-    <?php if (Sesion::tieneAcceso('roles')): ?>
-        <a href="<?= BASE_URL ?>/roles/roles_index.php">Roles y permisos</a>
-    <?php endif; ?>
+    <a href="<?= BASE_URL ?>/roles/roles_index.php">
+        Roles y permisos
+    </a>
 
-    <?php if (Sesion::tieneAcceso('cuentas')): ?>
-        <a href="<?= BASE_URL ?>/cuentas/cuentas_index.php">Catálogo de cuentas</a>
-    <?php endif; ?>
+    <a href="<?= BASE_URL ?>/cuentas/cuentas_index.php">
+        Catálogo de cuentas
+    </a>
 
-    <?php if (Sesion::tieneAcceso('diario')): ?>
-        <a href="<?= BASE_URL ?>/diario/diario_index.php">Diario general</a>
-    <?php endif; ?>
+    <a href="<?= BASE_URL ?>/diario/diario_index.php">
+        Diario general
+    </a>
 
     <?php if (Sesion::tieneAcceso('informes')): ?>
         <a href="<?= BASE_URL ?>/Controladores/InformeController.php">Informes</a>
@@ -33,4 +32,4 @@ require_once __DIR__ . '/../../config/Sesion.php';
 
 </nav>
 
-<main class="contenido">
+</nav>
