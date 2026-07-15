@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Iniciar sesión - Sistema Contable</title>
-     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/estilo.css">
+     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/login/estilos.css">
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/header.css">
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/barra.css">
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/footer.css">
@@ -21,7 +21,7 @@
             <div class="alerta alerta-error"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
 
-        <form method="POST" action="../../controladores/AuthController.php">
+        <form method="POST" action="<?= BASE_URL ?>/controladores/AuthController.php">
                     <?= Csrf::campoFormulario() ?>
 
             <label for="correo">Correo</label>
