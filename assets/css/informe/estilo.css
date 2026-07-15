@@ -1,0 +1,211 @@
+/* ==========================================================
+   MÓDULO DE INFORMES
+   ========================================================== */
+
+.informes-panel{
+    background: var(--color-superficie);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra-suave);
+    padding: 2rem;
+    max-width: 900px;
+    margin: auto;
+    border: 1px solid var(--color-borde);
+}
+
+.informes-panel:hover{
+    box-shadow: var(--sombra-media);
+}
+
+.titulo-modulo{
+    margin-bottom: 2rem;
+}
+
+.titulo-modulo h1{
+    margin: 0;
+    color: var(--color-primario);
+    font-size: 1.8rem;
+}
+
+.titulo-modulo p{
+    color: var(--color-texto-suave);
+    margin-top: .4rem;
+}
+
+.formulario-informe{
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.campo-formulario{
+    display: flex;
+    flex-direction: column;
+}
+
+.campo-formulario label{
+    margin-bottom: .4rem;
+    font-weight: 600;
+    color: var(--color-texto);
+}
+
+.campo-formulario input,
+.campo-formulario select{
+    padding: .75rem;
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-pequeno);
+    font-size: .95rem;
+    transition: all .25s;
+    background: white;
+}
+
+.campo-formulario input:focus,
+.campo-formulario select:focus{
+    outline: none;
+    border-color: var(--color-dorado);
+    box-shadow: 0 0 0 3px rgba(184,138,42,.18);
+}
+
+.acciones-formulario{
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Botones */
+
+.boton{
+    padding: .8rem 1.4rem;
+    border: none;
+    border-radius: var(--radio-pequeno);
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transicion);
+    text-decoration: none;
+    display: inline-block;
+}
+
+.boton-primario{
+    background: var(--color-primario);
+    color: white;
+}
+
+.boton-primario:hover{
+    background: var(--color-primario-hover);
+}
+
+.boton-success{
+    background: var(--color-success);
+    color: white;
+}
+
+.boton-success:hover{
+    opacity: .9;
+}
+
+.boton-warning{
+    background: var(--color-warning);
+    color: white;
+}
+
+.boton-warning:hover{
+    opacity: .9;
+}
+
+.boton-danger{
+    background: var(--color-danger);
+    color: white;
+}
+
+.boton-danger:hover{
+    opacity: .9;
+}
+
+/* Tablas de informes */
+
+.tabla-informe{
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+    background: white;
+    border-radius: var(--radio);
+    overflow: hidden;
+    box-shadow: var(--sombra-suave);
+}
+
+.tabla-informe th{
+    background: var(--color-primario);
+    color: white;
+    padding: .9rem;
+    text-align: left;
+}
+
+.tabla-informe td{
+    padding: .8rem;
+    border-bottom: 1px solid var(--color-borde);
+}
+
+.tabla-informe tr:nth-child(even){
+    background: #fafafa;
+}
+
+.tabla-informe tr:hover{
+    background: rgba(184,138,42,.08);
+}
+
+.resultado-correcto{
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: var(--radio-pequeno);
+    background: rgba(22,163,74,.12);
+    color: var(--color-success);
+    border: 1px solid var(--color-success);
+}
+
+.resultado-error{
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: var(--radio-pequeno);
+    background: rgba(220,38,38,.10);
+    color: var(--color-danger);
+    border: 1px solid var(--color-danger);
+}
+
+.acciones-informe{
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.hash-box{
+    width: 100%;
+    min-height: 90px;
+    padding: .8rem;
+    border-radius: var(--radio-pequeno);
+    border: 1px solid var(--color-borde);
+    background: #fafafa;
+    resize: vertical;
+    font-family: Consolas, monospace;
+    font-size: .85rem;
+}
+
+@media (max-width:768px){
+
+    .informes-panel{
+        padding: 1.2rem;
+    }
+
+    .acciones-informe{
+        flex-direction: column;
+    }
+
+    .acciones-informe .boton{
+        width: 100%;
+        text-align: center;
+    }
+
+    .tabla-informe{
+        font-size: .85rem;
+    }
+
+}

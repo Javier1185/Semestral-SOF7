@@ -1,144 +1,163 @@
 <?php
+/*
+|--------------------------------------------------------------------------
+| VerInforme.php
+|--------------------------------------------------------------------------
+| Vista principal del módulo de informes contables.
+| Integra:
+| - Sesión del proyecto
+| - Bitácora
+| - Header, Sidebar y Footer
+| - Estado de Resultados
+| - Balance General
+|--------------------------------------------------------------------------
+*/
 
-session_start();
-
+require_once __DIR__ . '/../../config/Sesion.php';
 require_once __DIR__ . '/../../modelos/informes_firma/InformeContable.php';
 require_once __DIR__ . '/../../modelos/informes_firma/Validador.php';
 require_once __DIR__ . '/../../modelos/Bitacora.php';
 
-// Recibe y limpia datos.
-$tipo = Validador::limpiarTexto($_GET['tipo'] ?? '');
+Sesion::iniciar();
+
+if (!Sesion::estaLogueado()) {
+    header('Location: ../../index.php');
+    exit;
+}
+
+$tipo   = Validador::limpiarTexto($_GET['tipo'] ?? '');
 $inicio = Validador::limpiarTexto($_GET['inicio'] ?? '');
-$fin = Validador::limpiarTexto($_GET['fin'] ?? '');
+$fin    = Validador::limpiarTexto($_GET['fin'] ?? '');
 
-// Valida tipo de informe.
 if (!Validador::validarTipoInforme($tipo)) {
-    die("Tipo de informe inválido.");
+    die('Tipo de informe inválido.');
 }
 
-// Valida fecha final.
 if (!Validador::validarFecha($fin)) {
-    die("Fecha final inválida.");
+    die('Fecha final inválida.');
 }
 
-// Valida fecha inicial solo para Estado de Resultados.
 if ($tipo === 'estado_resultados' && !Validador::validarFecha($inicio)) {
-    die("Fecha de inicio inválida.");
+    die('Fecha inicial inválida.');
 }
 
-// Crea el objeto que calcula los informes.
 $informe = new InformeContable();
 
-// Registra en bitácora que el usuario visualizó el informe.
-if (isset($_SESSION['usuario_id'])) {
-    Bitacora::registrar(
-        $_SESSION['usuario_id'],
-        'VER_INFORME',
-        null,
-        null,
-        'El usuario visualizó el informe ' . $tipo . ' del período ' . $inicio . ' al ' . $fin
-    );
-}
+Bitacora::registrar(
+    Sesion::obtenerId(),
+    'VER_INFORME',
+    null,
+    null,
+    "Visualizó el informe {$tipo} del período {$inicio} al {$fin}"
+);
 
+require_once __DIR__ . '/../layout/header.php';
+require_once __DIR__ . '/../layout/sidebar.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Ver Informe</title>
-</head>
-<body>
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/informe/estilo.css">
 
-<h2>Resultado del Informe</h2>
+<div class="contenido">
 
-<?php if ($tipo === 'estado_resultados'): ?>
+<section class="informes-panel">
 
-    <?php $resultado = $informe->estadoResultados($inicio, $fin); ?>
+<div class="titulo-modulo">
+<h1><?= $tipo === 'estado_resultados' ? 'Estado de Resultados' : 'Balance General'; ?></h1>
 
-    <h3>Estado de Resultados</h3>
-    <p>Desde: <?= htmlspecialchars($inicio) ?> hasta <?= htmlspecialchars($fin) ?></p>
-
-    <table border="1" cellpadding="8">
-        <tr>
-            <th>Concepto</th>
-            <th>Monto</th>
-        </tr>
-        <tr>
-            <td>Ingresos</td>
-            <td><?= number_format($resultado['ingresos'], 2) ?></td>
-        </tr>
-        <tr>
-            <td>Gastos</td>
-            <td><?= number_format($resultado['gastos'], 2) ?></td>
-        </tr>
-        <tr>
-            <td><strong>Utilidad Neta</strong></td>
-            <td><strong><?= number_format($resultado['utilidad_neta'], 2) ?></strong></td>
-        </tr>
-    </table>
-
+<?php if($tipo==='estado_resultados'): ?>
+<p>Período: <?= htmlspecialchars($inicio) ?> al <?= htmlspecialchars($fin) ?></p>
 <?php else: ?>
+<p>Fecha: <?= htmlspecialchars($fin) ?></p>
+<?php endif; ?>
+</div>
 
-    <?php $resultado = $informe->balanceGeneral($fin); ?>
+<?php if($tipo==='estado_resultados'):
+$resultado = $informe->estadoResultados($inicio,$fin);
+?>
 
-    <h3>Balance General</h3>
-    <p>Fecha: <?= htmlspecialchars($fin) ?></p>
+<table class="tabla-informe">
+<thead>
+<tr>
+<th>Concepto</th>
+<th>Monto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ingresos</td>
+<td><?= number_format($resultado['ingresos'],2) ?></td>
+</tr>
+<tr>
+<td>Gastos</td>
+<td><?= number_format($resultado['gastos'],2) ?></td>
+</tr>
+<tr>
+<td><strong>Utilidad Neta</strong></td>
+<td><strong><?= number_format($resultado['utilidad_neta'],2) ?></strong></td>
+</tr>
+</tbody>
+</table>
 
-    <table border="1" cellpadding="8">
-        <tr>
-            <th>Concepto</th>
-            <th>Monto</th>
-        </tr>
-        <tr>
-            <td>Activo</td>
-            <td><?= number_format($resultado['activo'], 2) ?></td>
-        </tr>
-        <tr>
-            <td>Pasivo</td>
-            <td><?= number_format($resultado['pasivo'], 2) ?></td>
-        </tr>
-        <tr>
-            <td>Patrimonio</td>
-            <td><?= number_format($resultado['patrimonio'], 2) ?></td>
-        </tr>
-        <tr>
-            <td><strong>Pasivo + Patrimonio</strong></td>
-            <td><strong><?= number_format($resultado['pasivo'] + $resultado['patrimonio'], 2) ?></strong></td>
-        </tr>
-    </table>
+<?php else:
+$resultado = $informe->balanceGeneral($fin);
+?>
 
-    <?php if ($resultado['cuadra']): ?>
-        <p style="color:green;">El balance cumple la ecuación contable.</p>
-    <?php else: ?>
-        <p style="color:red;">El balance NO cumple la ecuación contable.</p>
-    <?php endif; ?>
+<table class="tabla-informe">
+<thead>
+<tr>
+<th>Concepto</th>
+<th>Monto</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>Activo</td><td><?= number_format($resultado['activo'],2) ?></td></tr>
+<tr><td>Pasivo</td><td><?= number_format($resultado['pasivo'],2) ?></td></tr>
+<tr><td>Patrimonio</td><td><?= number_format($resultado['patrimonio'],2) ?></td></tr>
+<tr>
+<td><strong>Pasivo + Patrimonio</strong></td>
+<td><strong><?= number_format($resultado['pasivo']+$resultado['patrimonio'],2) ?></strong></td>
+</tr>
+</tbody>
+</table>
+
+<?php if($resultado['cuadra']): ?>
+<div class="resultado-correcto">
+El balance cumple la ecuación contable.
+</div>
+<?php else: ?>
+<div class="resultado-error">
+El balance NO cumple la ecuación contable.
+</div>
+<?php endif; ?>
 
 <?php endif; ?>
 
-<br><br>
+<div class="acciones-informe">
 
-<a href="GenerarPdf.php?tipo=<?= urlencode($tipo) ?>&inicio=<?= urlencode($inicio) ?>&fin=<?= urlencode($fin) ?>">
-    Generar PDF
+<a class="boton boton-primario"
+href="GenerarPdf.php?tipo=<?= urlencode($tipo) ?>&inicio=<?= urlencode($inicio) ?>&fin=<?= urlencode($fin) ?>">
+Generar PDF
 </a>
 
-<br><br>
-
-<?php if (isset($_SESSION['usuario_id'])): ?>
-    <a href="FirmarInforme.php?tipo=<?= urlencode($tipo) ?>&inicio=<?= urlencode($inicio) ?>&fin=<?= urlencode($fin) ?>">
-        Firmar informe
-    </a>
-<?php endif; ?>
-
-<br><br>
-
-<a href="VerificarInforme.php?tipo=<?= urlencode($tipo) ?>&inicio=<?= urlencode($inicio) ?>&fin=<?= urlencode($fin) ?>">
-    Verificar confiabilidad
+<a class="boton boton-success"
+href="FirmarInforme.php?tipo=<?= urlencode($tipo) ?>&inicio=<?= urlencode($inicio) ?>&fin=<?= urlencode($fin) ?>">
+Firmar Informe
 </a>
 
-<br><br>
+<a class="boton boton-warning"
+href="VerificarInforme.php?tipo=<?= urlencode($tipo) ?>&inicio=<?= urlencode($inicio) ?>&fin=<?= urlencode($fin) ?>">
+Verificar Confiabilidad
+</a>
 
-<a href="SeleccionarInforme.php">Volver</a>
+<a class="boton boton-danger"
+href="SeleccionarInforme.php">
+Volver
+</a>
 
-</body>
-</html>
+</div>
+
+</section>
+
+</div>
+
+<?php require_once __DIR__ . '/../layout/footer.php'; ?>

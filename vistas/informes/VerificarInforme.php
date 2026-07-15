@@ -1,259 +1,156 @@
 <?php
+/**
+ * VerificarInforme.php
+ * Verifica la integridad de un informe mediante el hash y la firma digital.
+ */
 
-session_start();
-
+require_once __DIR__ . '/../../config/Sesion.php';
 require_once __DIR__ . '/../../config/Conexion.php';
 require_once __DIR__ . '/../../modelos/informes_firma/FirmaDigital.php';
 require_once __DIR__ . '/../../modelos/informes_firma/InformeContable.php';
 require_once __DIR__ . '/../../modelos/informes_firma/Validador.php';
 require_once __DIR__ . '/../../modelos/Bitacora.php';
 
-/*
-|--------------------------------------------------------------------------
-| VALIDACIÓN DE DATOS RECIBIDOS
-|--------------------------------------------------------------------------
-| Se reciben el tipo de informe y las fechas por GET.
-| Antes de consultar o verificar, se limpian y validan.
-|--------------------------------------------------------------------------
-*/
+Sesion::iniciar();
+
+if (!Sesion::estaLogueado()) {
+    header("Location: ../../index.php");
+    exit;
+}
 
 $tipo   = Validador::limpiarTexto($_GET['tipo'] ?? '');
 $inicio = Validador::limpiarTexto($_GET['inicio'] ?? '');
 $fin    = Validador::limpiarTexto($_GET['fin'] ?? '');
 
-if (!Validador::validarTipoInforme($tipo)) {
-    die("Tipo de informe inválido.");
-}
+if (!Validador::validarTipoInforme($tipo)) die("Tipo de informe inválido.");
+if (!Validador::validarFecha($fin)) die("Fecha final inválida.");
+if ($tipo === 'estado_resultados' && !Validador::validarFecha($inicio)) die("Fecha inicial inválida.");
 
-if (!Validador::validarFecha($fin)) {
-    die("Fecha final inválida.");
-}
+$pdo = Conexion::obtenerInstancia()->obtenerPDO();
 
-if ($tipo === 'estado_resultados' && !Validador::validarFecha($inicio)) {
-    die("Fecha de inicio inválida.");
-}
+$sql = "SELECT c.*,u.nombre AS nombre_usuario,u.correo AS correo_usuario
+        FROM cierres c
+        INNER JOIN usuarios u ON c.usuario_id=u.id
+        WHERE c.tipo=:tipo
+          AND c.periodo_inicio=:inicio
+          AND c.periodo_fin=:fin
+          AND c.estado='CERRADO'
+        ORDER BY c.fecha_cierre DESC
+        LIMIT 1";
 
-/*
-|--------------------------------------------------------------------------
-| CONEXIÓN A LA BASE DE DATOS
-|--------------------------------------------------------------------------
-| Se usa la conexión real del proyecto.
-|--------------------------------------------------------------------------
-*/
-
-$conexion = Conexion::obtenerInstancia()->obtenerPDO();
-
-/*
-|--------------------------------------------------------------------------
-| BUSCAR EL ÚLTIMO CIERRE DEFINITIVO
-|--------------------------------------------------------------------------
-| En este proyecto la firma definitiva se guarda en la tabla cierres.
-| El Gerente Financiero deja el estado como CERRADO.
-|--------------------------------------------------------------------------
-*/
-
-$sql = "
-    SELECT
-        c.*,
-        u.nombre AS nombre_usuario,
-        u.correo AS correo_usuario
-    FROM cierres c
-    INNER JOIN usuarios u
-        ON c.usuario_id = u.id
-    WHERE c.tipo = :tipo
-    AND c.periodo_inicio = :inicio
-    AND c.periodo_fin = :fin
-    AND c.estado = 'CERRADO'
-    ORDER BY c.fecha_cierre DESC
-    LIMIT 1
-";
-
-/*
-|--------------------------------------------------------------------------
-| PREPARAR Y EJECUTAR LA CONSULTA
-|--------------------------------------------------------------------------
-| Primero se prepara la consulta SQL y luego se envían los parámetros.
-|--------------------------------------------------------------------------
-*/
-
-$stmt = $conexion->prepare($sql);
-
+$stmt = $pdo->prepare($sql);
 $stmt->execute([
-    ':tipo'   => $tipo,
-    ':inicio' => $inicio ?: null,
-    ':fin'    => $fin
+    ':tipo'=>$tipo,
+    ':inicio'=>$inicio ?: null,
+    ':fin'=>$fin
 ]);
 
-$cierreGuardado = $stmt->fetch(PDO::FETCH_ASSOC);
+$cierre = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$cierreGuardado) {
+$hashActual='';
+$hashOriginal='';
+$firmaEsValida=false;
+$informeConfiable=false;
 
-    if (isset($_SESSION['usuario_id'])) {
-        Bitacora::registrar(
-            $_SESSION['usuario_id'],
-            'VERIFICAR_INFORME',
-            'cierres',
-            null,
-            'Se intentó verificar el informe ' . $tipo .
-            ' del período ' . $inicio . ' al ' . $fin .
-            ', pero todavía no tiene cierre definitivo.'
-        );
-    }
+if(!$cierre){
 
-} else {
-
-    /*
-    |--------------------------------------------------------------------------
-    | GENERAR HASH ACTUAL
-    |--------------------------------------------------------------------------
-    | Se vuelve a calcular el hash con los datos actuales del informe.
-    | Si alguien modificó el diario después del cierre, este hash será distinto.
-    |--------------------------------------------------------------------------
-    */
-
-    $informe = new InformeContable();
-    $firmaDigital = new FirmaDigital();
-
-    $contenidoActual = $informe->generarContenidoHash($tipo, $inicio, $fin);
-    $hashActual = $firmaDigital->generarHash($contenidoActual);
-
-    /*
-    |--------------------------------------------------------------------------
-    | HASH ORIGINAL
-    |--------------------------------------------------------------------------
-    | Este es el hash guardado cuando el Gerente Financiero cerró el informe.
-    |--------------------------------------------------------------------------
-    */
-
-    $hashOriginal = $cierreGuardado['hash_datos'];
-
-    /*
-    |--------------------------------------------------------------------------
-    | VERIFICAR FIRMA DIGITAL
-    |--------------------------------------------------------------------------
-    | Además de comparar hashes, se verifica que la firma digital corresponda
-    | al hash original guardado.
-    |--------------------------------------------------------------------------
-    */
-
-    $firmaEsValida = $firmaDigital->verificarFirma(
-        $hashOriginal,
-        $cierreGuardado['firma']
+    Bitacora::registrar(
+        Sesion::obtenerId(),
+        'VERIFICAR_INFORME',
+        'cierres',
+        null,
+        'Intentó verificar un informe sin cierre definitivo.'
     );
 
-    /*
-    |--------------------------------------------------------------------------
-    | RESULTADO FINAL
-    |--------------------------------------------------------------------------
-    | El informe es confiable solamente si:
-    | 1. El hash actual es igual al hash original.
-    | 2. La firma digital es válida.
-    |--------------------------------------------------------------------------
-    */
+}else{
 
-    $informeConfiable = ($hashActual === $hashOriginal && $firmaEsValida);
+    $modelo = new InformeContable();
+    $firma = new FirmaDigital();
 
-    /*
-    |--------------------------------------------------------------------------
-    | REGISTRO EN BITÁCORA
-    |--------------------------------------------------------------------------
-    */
+    $contenido = $modelo->generarContenidoHash($tipo,$inicio,$fin);
 
-    if (isset($_SESSION['usuario_id'])) {
+    $hashActual   = $firma->generarHash($contenido);
+    $hashOriginal = $cierre['hash_datos'];
 
-        if ($informeConfiable) {
-            Bitacora::registrar(
-                $_SESSION['usuario_id'],
-                'VERIFICAR_INFORME',
-                'cierres',
-                $cierreGuardado['id'],
-                'El informe ' . $tipo .
-                ' del período ' . $inicio . ' al ' . $fin .
-                ' fue verificado como CONFIABLE.'
-            );
-        } else {
-            Bitacora::registrar(
-                $_SESSION['usuario_id'],
-                'INFORME_NO_CONFIABLE',
-                'cierres',
-                $cierreGuardado['id'],
-                'El informe ' . $tipo .
-                ' del período ' . $inicio . ' al ' . $fin .
-                ' fue verificado como NO CONFIABLE.'
-            );
-        }
-    }
+    $firmaEsValida = $firma->verificarFirma(
+        $hashOriginal,
+        $cierre['firma']
+    );
+
+    $informeConfiable = (
+        $hashActual === $hashOriginal &&
+        $firmaEsValida
+    );
+
+    Bitacora::registrar(
+        Sesion::obtenerId(),
+        $informeConfiable ? 'VERIFICAR_INFORME' : 'INFORME_NO_CONFIABLE',
+        'cierres',
+        $cierre['id'],
+        $informeConfiable ?
+        'Informe verificado correctamente.' :
+        'El informe fue modificado después del cierre.'
+    );
 }
 
+require_once __DIR__.'/../layout/header.php';
+require_once __DIR__.'/../layout/sidebar.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Verificar Informe</title>
-</head>
-<body>
+<link rel="stylesheet" href="../../assets/css/informe/estilo.css">
 
-<h2>Verificación del Informe</h2>
+<div class="contenido">
+<section class="informes-panel">
 
-<?php if (!$cierreGuardado): ?>
+<h1>Verificación del Informe</h1>
 
-    <p style="color:orange;">
-        Este informe todavía no tiene una firma definitiva del Gerente Financiero.
-    </p>
+<?php if(!$cierre): ?>
+
+<div class="alerta alerta-advertencia">
+Este informe todavía no tiene un cierre definitivo realizado por el Gerente Financiero.
+</div>
 
 <?php else: ?>
 
-    <p><strong>Cerrado por:</strong> 
-        <?= htmlspecialchars($cierreGuardado['nombre_usuario'] ?? $cierreGuardado['correo_usuario']) ?>
-    </p>
+<p><strong>Cerrado por:</strong> <?= htmlspecialchars($cierre['nombre_usuario']) ?></p>
+<p><strong>Correo:</strong> <?= htmlspecialchars($cierre['correo_usuario']) ?></p>
+<p><strong>Fecha:</strong> <?= htmlspecialchars($cierre['fecha_cierre']) ?></p>
+<p><strong>Estado:</strong> <?= htmlspecialchars($cierre['estado']) ?></p>
 
-    <p><strong>Fecha de cierre:</strong> 
-        <?= htmlspecialchars($cierreGuardado['fecha_cierre']) ?>
-    </p>
+<?php if($informeConfiable): ?>
 
-    <p><strong>Estado guardado:</strong> 
-        <?= htmlspecialchars($cierreGuardado['estado']) ?>
-    </p>
+<div class="resultado-correcto">
+<h3>Informe confiable</h3>
+<p>El informe mantiene la misma información registrada durante el cierre.</p>
+</div>
 
-    <?php if ($informeConfiable): ?>
+<?php else: ?>
 
-        <h3 style="color:green;">Informe confiable</h3>
-        <p>
-            El informe no ha sido modificado después de su cierre definitivo
-            y la firma digital es válida.
-        </p>
-
-    <?php else: ?>
-
-        <h3 style="color:red;">Informe NO confiable</h3>
-        <p>
-            El informe fue modificado después del cierre definitivo
-            o la firma digital no es válida.
-        </p>
-
-    <?php endif; ?>
-
-    <hr>
-
-    <p><strong>Hash original:</strong></p>
-    <textarea rows="3" cols="90" readonly><?= htmlspecialchars($hashOriginal) ?></textarea>
-
-    <p><strong>Hash actual:</strong></p>
-    <textarea rows="3" cols="90" readonly><?= htmlspecialchars($hashActual) ?></textarea>
-
-    <p><strong>Firma digital válida:</strong> 
-        <?= $firmaEsValida ? 'Sí' : 'No' ?>
-    </p>
+<div class="resultado-error">
+<h3>Informe NO confiable</h3>
+<p>Se detectaron modificaciones posteriores al cierre o la firma no es válida.</p>
+</div>
 
 <?php endif; ?>
 
-<br><br>
+<h3>Hash original</h3>
+<textarea class="hash-box" readonly><?= htmlspecialchars($hashOriginal) ?></textarea>
 
-<a href="VerInforme.php?tipo=<?= urlencode($tipo) ?>&inicio=<?= urlencode($inicio) ?>&fin=<?= urlencode($fin) ?>">
-    Volver al informe
+<h3>Hash actual</h3>
+<textarea class="hash-box" readonly><?= htmlspecialchars($hashActual) ?></textarea>
+
+<p><strong>Firma digital válida:</strong> <?= $firmaEsValida ? 'Sí' : 'No'; ?></p>
+
+<?php endif; ?>
+
+<div class="acciones-informe">
+<a class="boton boton-primario"
+href="VerInforme.php?tipo=<?= urlencode($tipo) ?>&inicio=<?= urlencode($inicio) ?>&fin=<?= urlencode($fin) ?>">
+Volver al informe
 </a>
+</div>
 
-</body>
-</html>
+</section>
+</div>
+
+<?php require_once __DIR__.'/../layout/footer.php'; ?>

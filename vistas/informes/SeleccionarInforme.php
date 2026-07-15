@@ -1,169 +1,126 @@
 <?php
 
-/*
-| VISTA PARA SELECCIONAR INFORME
-|--------------------------------------------------------------------------
-| Esta pantalla permite elegir:
-|
-| - Estado de Resultados.
-| - Balance General.
-| - Fecha inicial.
-| - Fecha final.
-*/
-
 require_once __DIR__ . '/../../config/Sesion.php';
 
 Sesion::iniciar();
-
-/*
-|--------------------------------------------------------------------------
-| SEGURIDAD ADICIONAL
-|--------------------------------------------------------------------------
-| Aunque normalmente esta vista es abierta desde InformeController.php,
-| se vuelve a comprobar que exista una sesión activa.
-|--------------------------------------------------------------------------
-*/
 
 if (!Sesion::estaLogueado()) {
     header('Location: ../../index.php');
     exit;
 }
+
+/*
+|--------------------------------------------------------------------------
+| CARGAR LAYOUT DEL SISTEMA
+|--------------------------------------------------------------------------
+| Estas vistas mantienen el mismo encabezado, menú lateral y pie de página
+| que utilizan los demás módulos.
+|--------------------------------------------------------------------------
+*/
+
+require_once __DIR__ . '/../layout/header.php';
+require_once __DIR__ . '/../layout/sidebar.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
+<main class="contenido-principal">
 
-<head>
-    <meta charset="UTF-8">
+    <section class="tarjeta informes-panel">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+        <div class="titulo-modulo">
+            <h1>Generar informe contable</h1>
 
-    <title>Seleccionar Informe</title>
-</head>
-
-<body>
-
-    <h2>Generar Informe Contable</h2>
-
-    <p>
-        Seleccione el informe y el período que desea consultar.
-    </p>
-
-    <!--
-        IMPORTANTE:
-
-        El navegador mantiene como dirección actual:
-
-        controladores/InformeController.php
-
-        Por eso debemos salir de la carpeta "controladores" y entrar en:
-
-        vistas/informes/VerInforme.php
-    -->
-
-    <form
-        action="../vistas/informes/VerInforme.php"
-        method="GET"
-        id="formInforme"
-    >
-
-        <div>
-            <label for="tipo">
-                Tipo de informe:
-            </label>
-
-            <select
-                name="tipo"
-                id="tipo"
-                required
-            >
-                <option value="">
-                    Seleccione...
-                </option>
-
-                <option value="estado_resultados">
-                    Estado de Resultados
-                </option>
-
-                <option value="balance_general">
-                    Balance General
-                </option>
-            </select>
+            <p>
+                Seleccione el tipo de informe y el período que desea consultar.
+            </p>
         </div>
 
-        <br>
+        <form
+            action="<?= BASE_URL ?>/vistas/informes/VerInforme.php"
+            method="GET"
+            class="formulario-informe"
+            id="formInforme"
+        >
 
-        <div id="contenedorInicio">
-            <label for="inicio">
-                Fecha inicial:
-            </label>
+            <div class="campo-formulario">
+                <label for="tipo">Tipo de informe</label>
 
-            <input
-                type="date"
-                name="inicio"
-                id="inicio"
+                <select
+                    name="tipo"
+                    id="tipo"
+                    required
+                >
+                    <option value="">Seleccione...</option>
+
+                    <option value="estado_resultados">
+                        Estado de Resultados
+                    </option>
+
+                    <option value="balance_general">
+                        Balance General
+                    </option>
+                </select>
+            </div>
+
+            <div
+                class="campo-formulario"
+                id="contenedorInicio"
             >
-        </div>
+                <label for="inicio">Fecha inicial</label>
 
-        <br>
+                <input
+                    type="date"
+                    name="inicio"
+                    id="inicio"
+                >
+            </div>
 
-        <div>
-            <label for="fin">
-                Fecha final:
-            </label>
+            <div class="campo-formulario">
+                <label for="fin">Fecha final</label>
 
-            <input
-                type="date"
-                name="fin"
-                id="fin"
-                required
-            >
-        </div>
+                <input
+                    type="date"
+                    name="fin"
+                    id="fin"
+                    required
+                >
+            </div>
 
-        <br>
+            <div class="acciones-formulario">
+                <button
+                    type="submit"
+                    class="boton boton-primario"
+                >
+                    Ver informe
+                </button>
+            </div>
 
-        <button type="submit">
-            Ver informe
-        </button>
+        </form>
 
-    </form>
+    </section>
 
-    <script>
-        /*
-        |--------------------------------------------------------------------------
-        | CONTROL DE FECHA INICIAL
-        |--------------------------------------------------------------------------
-        | El Estado de Resultados necesita fecha inicial y final.
-        |
-        | El Balance General representa la situación en una fecha determinada,
-        | por lo que solamente necesita la fecha final.
-        |--------------------------------------------------------------------------
-        */
+</main>
 
-        const tipoInforme = document.getElementById('tipo');
-        const fechaInicio = document.getElementById('inicio');
-        const contenedorInicio = document.getElementById('contenedorInicio');
+<script>
+    const tipoInforme = document.getElementById('tipo');
+    const fechaInicio = document.getElementById('inicio');
+    const contenedorInicio = document.getElementById('contenedorInicio');
 
-        function actualizarCampos() {
-            if (tipoInforme.value === 'balance_general') {
-                contenedorInicio.style.display = 'none';
-                fechaInicio.required = false;
-                fechaInicio.value = '';
-            } else {
-                contenedorInicio.style.display = 'block';
-                fechaInicio.required =
-                    tipoInforme.value === 'estado_resultados';
-            }
+    function actualizarCampos() {
+        const esBalance = tipoInforme.value === 'balance_general';
+
+        contenedorInicio.style.display = esBalance ? 'none' : 'block';
+        fechaInicio.required = tipoInforme.value === 'estado_resultados';
+
+        if (esBalance) {
+            fechaInicio.value = '';
         }
+    }
 
-        tipoInforme.addEventListener('change', actualizarCampos);
+    tipoInforme.addEventListener('change', actualizarCampos);
 
-        actualizarCampos();
-    </script>
+    actualizarCampos();
+</script>
 
-</body>
-
-</html>
+<?php
+require_once __DIR__ . '/../layout/footer.php';
+?>

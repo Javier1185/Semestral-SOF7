@@ -10,6 +10,7 @@ $usuario = Sesion::usuarioActual();
     <meta charset="UTF-8">
     <title>Sistema Contable</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/estilo.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/informe/estilo.css">
 </head>
 <body>
 
