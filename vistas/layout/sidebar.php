@@ -14,11 +14,11 @@ require_once __DIR__ . '/../../config/Sesion.php';
     <?php endif; ?>
 
     <?php if (Sesion::tieneAcceso('cuentas')): ?>
-        <a href="<?= BASE_URL ?>/Controladores/CuentaController.php">Catálogo de cuentas</a>
+        <a href="<?= BASE_URL ?>/cuentas/cuentas_index.php">Catálogo de cuentas</a>
     <?php endif; ?>
 
     <?php if (Sesion::tieneAcceso('diario')): ?>
-        <a href="<?= BASE_URL ?>/Controladores/DiarioController.php">Diario general</a>
+        <a href="<?= BASE_URL ?>/diario/diario_index.php">Diario general</a>
     <?php endif; ?>
 
     <?php if (Sesion::tieneAcceso('informes')): ?>
