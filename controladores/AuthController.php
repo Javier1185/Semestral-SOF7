@@ -3,7 +3,6 @@
 require_once __DIR__ . '/../config/Conexion.php';
 require_once __DIR__ . '/../config/Sesion.php';
 require_once __DIR__ . '/../seguridad/Validaciones.php';
-require_once __DIR__ . '/../seguridad/Csrf.php';
 require_once __DIR__ . '/../modelos/Bitacora.php';
 
 Sesion::iniciar();
@@ -17,8 +16,6 @@ if (Sesion::estaLogueado()) {
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    Csrf::validarOMorir();
-
     $correo = Validaciones::sanitizarTexto($_POST['correo'] ?? '');
     $contrasena = $_POST['contrasena'] ?? '';
 
@@ -28,23 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'El correo no tiene un formato válido.';
     } else {
         $pdo = Conexion::obtenerInstancia()->obtenerPDO();
-
-        // Freno de fuerza bruta: si en los últimos 15 minutos hubo 5 o más
-        // intentos fallidos para este correo, se bloquea temporalmente.
-        $stmtIntentos = $pdo->prepare("
-            SELECT COUNT(*) FROM bitacora
-            WHERE accion = 'login_fallido'
-              AND detalle LIKE :correo
-              AND fecha >= (NOW() - INTERVAL 15 MINUTE)
-        ");
-        $stmtIntentos->execute(['correo' => '%' . $correo . '%']);
-        $intentosRecientes = (int) $stmtIntentos->fetchColumn();
-
-        if ($intentosRecientes >= 5) {
-            $error = 'Demasiados intentos fallidos. Intenta de nuevo en unos minutos.';
-            require_once __DIR__ . '/../vistas/auth/login.php';
-            exit;
-        }
 
         $sql = "SELECT u.id, u.nombre, u.correo, u.contrasena, u.rol_id, u.estado_actividad,
                        r.nombre AS rol_nombre
