@@ -72,6 +72,12 @@ include '../vistas/layout/sidebar.php';
                     Editar
                 </a>
 
+                |
+
+                <a href="../permisos/permisos_index.php?rol=<?= $rol['id'] ?>">
+                    Permisos
+                </a>
+
             </td>
 
         </tr>
