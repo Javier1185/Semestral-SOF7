@@ -24,7 +24,7 @@ require_once __DIR__ . '/../../config/Sesion.php';
     <?php endif; ?>
 
     <?php if (Sesion::tieneAcceso('informes')): ?>
-        <a href="<?= BASE_URL ?>/Controladores/InformeController.php">Informes</a>
+        <a href="<?= BASE_URL ?>/controladores/InformeController.php">Informes</a>
     <?php endif; ?>
 
     <?php if (Sesion::tieneAcceso('bitacora')): ?>
