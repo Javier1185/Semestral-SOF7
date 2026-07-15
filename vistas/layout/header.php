@@ -11,6 +11,9 @@ $usuario = Sesion::usuarioActual();
     <title>Sistema Contable</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/estilo.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/header.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/barra.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/footer.css">
 </head>
 <body>
 

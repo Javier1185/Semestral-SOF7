@@ -22,8 +22,14 @@ require_once __DIR__ . '/../../config/config.php';
         Diario general
     </a>
 
-    <a href="<?= BASE_URL ?>/Controladores/InformeController.php">
-        Informes
-    </a>
+    <?php if (Sesion::tieneAcceso('informes')): ?>
+        <a href="<?= BASE_URL ?>/Controladores/InformeController.php">Informes</a>
+    <?php endif; ?>
+
+    <?php if (Sesion::tieneAcceso('roles')): ?>
+        <a href="<?= BASE_URL ?>/bitacora/bitacora_index.php">Bitácora</a>
+    <?php endif; ?>
+
+</nav>
 
 </nav>

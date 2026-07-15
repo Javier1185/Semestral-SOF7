@@ -1,7 +1,20 @@
-<?php
-require_once __DIR__ . '/../layout/header.php';
-require_once __DIR__ . '/../layout/sidebar.php';
-?>
+<?php require_once __DIR__ . '/../../config/config.php'; ?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema Contable - Inicio</title>
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/estilo.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/header.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/barra.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/footer.css"><link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/estilo.css">
+</head>
+<body class="pagina-publica">
+
+<header class="barra-superior">
+    <span class="marca">Sistema Contable</span>
+    <a class="boton-login" href="<?= BASE_URL ?>/controladores/AuthController.php">Iniciar sesión</a>
+</header>
 
 <section class="hero">
     <h1>Lleva el control de tus finanzas sin depender de una hoja de cálculo</h1>
