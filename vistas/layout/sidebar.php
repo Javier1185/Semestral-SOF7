@@ -6,11 +6,11 @@ require_once __DIR__ . '/../../config/Sesion.php';
     <a href="<?= BASE_URL ?>/index.php">Inicio</a>
 
     <?php if (Sesion::tieneAcceso('usuarios')): ?>
-        <a href="<?= BASE_URL ?>/Controladores/UsuarioController.php">Usuarios</a>
+        <a href="<?= BASE_URL ?>/usuarios/usuarios_index.php">Usuarios</a>
     <?php endif; ?>
 
     <?php if (Sesion::tieneAcceso('roles')): ?>
-        <a href="<?= BASE_URL ?>/Controladores/RolController.php">Roles y permisos</a>
+        <a href="<?= BASE_URL ?>/roles/roles_index.php">Roles y permisos</a>
     <?php endif; ?>
 
     <?php if (Sesion::tieneAcceso('cuentas')): ?>
