@@ -17,8 +17,8 @@
             <div class="alerta alerta-error"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
 
-        <form method="POST" action="AuthController.php">
-            <?= Csrf::campoFormulario() ?>
+        <form method="POST" action="../../controladores/AuthController.php">
+                    <?= Csrf::campoFormulario() ?>
 
             <label for="correo">Correo</label>
             <input type="email" id="correo" name="correo" required autofocus>
