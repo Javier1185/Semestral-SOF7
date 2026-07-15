@@ -421,3 +421,124 @@ textarea {
   overflow-y: auto;
   max-height: none; /* ya no depende de un 65vh fijo, se ajusta al espacio real disponible */
 }
+/* =====================================================
+   FORMULARIOS DEL SISTEMA
+=====================================================*/
+
+.card-formulario{
+
+    max-width:700px;
+
+    margin:auto;
+
+    background:var(--color-superficie);
+
+    padding:35px;
+
+    border-radius:var(--radio);
+
+    box-shadow:var(--sombra-media);
+
+    border:1px solid var(--color-borde);
+
+}
+
+.grupo-formulario{
+
+    display:flex;
+
+    flex-direction:column;
+
+    margin-bottom:22px;
+
+}
+
+.grupo-formulario label{
+
+    font-weight:600;
+
+    margin-bottom:8px;
+
+    color:var(--color-primario);
+
+    font-size:15px;
+
+}
+
+.grupo-formulario input,
+
+.grupo-formulario select{
+
+    width:100%;
+
+    padding:12px 15px;
+
+    border:1px solid var(--color-borde);
+
+    border-radius:12px;
+
+    background:white;
+
+    font-size:15px;
+
+    transition:.25s;
+
+}
+
+.grupo-formulario input:focus,
+
+.grupo-formulario select:focus{
+
+    outline:none;
+
+    border-color:var(--color-dorado);
+
+    box-shadow:0 0 0 4px rgba(184,138,42,.18);
+
+}
+
+.acciones-formulario{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:15px;
+
+    margin-top:30px;
+
+}
+
+.boton-secundario{
+
+    display:inline-block;
+
+    padding:12px 20px;
+
+    background:#6B7280;
+
+    color:white !important;
+
+    border-radius:12px;
+
+    transition:.25s;
+
+}
+
+.boton-secundario:hover{
+
+    background:#4B5563;
+
+    text-decoration:none;
+
+}
+
+.card-formulario h3{
+
+    margin-top:0;
+
+    margin-bottom:25px;
+
+    color:var(--color-primario);
+
+}

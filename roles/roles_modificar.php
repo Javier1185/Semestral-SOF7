@@ -1,6 +1,19 @@
 <?php
 
 require_once '../config/Conexion.php';
+require_once '../config/Sesion.php';
+require_once '../config/config.php';
+
+Sesion::iniciar();
+
+if (!Sesion::estaLogueado()) {
+    header('Location: ' . BASE_URL . '/vistas/auth/login.php');
+    exit;
+}
+
+if (!Sesion::tieneAcceso('roles', 'editar')) {
+    die('No tiene permisos para modificar roles.');
+}
 
 $pdo = Conexion::obtenerInstancia()->obtenerPDO();
 
@@ -16,22 +29,14 @@ if (!$rol) {
     die("Rol no encontrado.");
 }
 
+include '../vistas/layout/header.php';
+include '../vistas/layout/sidebar.php';
+
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Editar Rol</title>
+<h2>Editar Rol</h2>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-
-<body>
-
-<div class="container mt-4">
-
-    <h2>Editar Rol</h2>
+<div class="card-formulario">
 
     <form action="roles_actualizar.php" method="POST">
 
@@ -40,30 +45,44 @@ if (!$rol) {
             name="id"
             value="<?= $rol['id'] ?>">
 
-        <div class="mb-3">
+        <div class="grupo-formulario">
 
             <label>Nombre del Rol</label>
 
             <input
                 type="text"
                 name="nombre"
-                class="form-control"
                 value="<?= htmlspecialchars($rol['nombre']) ?>"
                 required>
 
         </div>
 
-        <button class="btn btn-success">
-            Actualizar
-        </button>
+        <div class="acciones-formulario">
 
-        <a href="roles_index.php" class="btn btn-secondary">
-            Cancelar
-        </a>
+            <button
+                type="submit"
+                class="boton-login">
+
+                Actualizar Rol
+
+            </button>
+
+            <a
+                href="roles_index.php"
+                class="boton-secundario">
+
+                Cancelar
+
+            </a>
+
+        </div>
 
     </form>
 
 </div>
 
-</body>
-</html>
+</main>
+
+<?php
+include '../vistas/layout/footer.php';
+?>
