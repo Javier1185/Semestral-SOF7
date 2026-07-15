@@ -116,7 +116,8 @@ INSERT INTO permisos (rol_id, modulo, ver, editar) VALUES
 (2, 'informes', 1, 0),
 (3, 'cuentas', 1, 1),
 (3, 'diario', 1, 1),
-(3, 'informes', 1, 1);
+(3, 'informes', 1, 1)
+(1, 'roles', 1, 1);
 
 -- Usuarios de prueba (contraseña real para todos: 123456)
 INSERT INTO usuarios (nombre, correo, contrasena, rol_id) VALUES
