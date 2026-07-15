@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/estilo.css">
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/header.css">
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/barra.css">
-<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/footer.css"><link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/estilo.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/footer.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/estilo.css">
 </head>
 <body class="pagina-publica">
 
