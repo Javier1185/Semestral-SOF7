@@ -44,6 +44,10 @@ class Sesion
     {
         self::iniciar();
 
+        // Regenera el ID de sesión al autenticar para evitar "session fixation"
+        // (que un atacante fije de antemano el ID de sesión de la víctima).
+        session_regenerate_id(true);
+
         $_SESSION['usuario_id'] = $usuario['id'];
         $_SESSION['nombre'] = $usuario['nombre'];
         $_SESSION['correo'] = $usuario['correo'];
