@@ -242,7 +242,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
     href="<?= BASE_URL ?>/assets/css/informe/estilo.css"
 >
 
-<div class="contenido">
+<div class="contenido" style="max-height: 100vh; overflow-y: auto;">
 
     <section class="informes-panel">
 
@@ -315,15 +315,8 @@ require_once __DIR__ . '/../layout/sidebar.php';
         ><?= htmlspecialchars($hash, ENT_QUOTES, 'UTF-8') ?></textarea>
 
         <div class="acciones-informe">
-
-            <a
-                class="boton boton-primario"
-                href="VerInforme.php?tipo=<?= urlencode($tipo) ?>&inicio=<?= urlencode($periodoInicio) ?>&fin=<?= urlencode($fin) ?>"
-            >
-                Volver al informe
-            </a>
-
-        </div>
+<a class="boton boton-primario" href="VerInforme.php?tipo=<?= urlencode($tipo) ?>&inicio=<?= urlencode($periodoInicio) ?>&fin=<?= urlencode($fin) ?>">Volver al informe</a>
+</div>
 
     </section>
 

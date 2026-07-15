@@ -6,6 +6,7 @@ require_once __DIR__ . '/../config/Sesion.php';
 require_once __DIR__ . '/../seguridad/Validaciones.php';
 require_once __DIR__ . '/../seguridad/Csrf.php';
 require_once __DIR__ . '/../modelos/Bitacora.php';
+require_once __DIR__ . '/../seguridad/Sanitizar.php';
 
 Sesion::iniciar();
 
@@ -20,14 +21,14 @@ $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     Csrf::validarOMorir();
 
-    $correo = Validaciones::sanitizarTexto($_POST['correo'] ?? '');
-    $contrasena = $_POST['contrasena'] ?? '';
+    $correo = Sanitizar::correo($_POST['correo'] ?? '');
+$contrasena = Sanitizar::contrasena($_POST['contrasena'] ?? '');
 
-    if (!Validaciones::noVacio($correo) || !Validaciones::noVacio($contrasena)) {
-        $error = 'Completa correo y contraseña.';
-    } elseif (!Validaciones::validarCorreo($correo)) {
-        $error = 'El correo no tiene un formato válido.';
-    } else {
+if (!Validaciones::noVacio($correo) || !Validaciones::noVacio($contrasena)) {
+    $error = 'Completa correo y contraseña.';
+} elseif (!Validaciones::validarCorreo($correo)) {
+    $error = 'El correo no tiene un formato válido.';
+} else {
         $pdo = Conexion::obtenerInstancia()->obtenerPDO();
 
         // Freno de fuerza bruta: si en los últimos 15 minutos hubo 5 o más
