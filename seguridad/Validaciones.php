@@ -22,6 +22,12 @@ class Validaciones
         return self::sanitizarTexto($valor) !== '';
     }
 
+    // Valida que el nombre solo contenga letras, espacios y acentos.
+    public static function validarNombre(string $nombre): bool
+    {
+        return preg_match('/^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,100}$/u', trim($nombre)) === 1;
+    }
+
     // Valida que un valor sea numérico (útil para montos de debito/credito).
     public static function esNumerico($valor): bool
     {
@@ -35,7 +41,9 @@ class Validaciones
         if (count($partes) !== 3) {
             return false;
         }
+
         [$anio, $mes, $dia] = $partes;
-        return checkdate((int) $mes, (int) $dia, (int) $anio);
+
+        return checkdate((int)$mes, (int)$dia, (int)$anio);
     }
 }
