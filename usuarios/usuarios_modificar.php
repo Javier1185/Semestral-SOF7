@@ -1,19 +1,6 @@
 <?php
 
 require_once '../config/Conexion.php';
-require_once '../config/Sesion.php';
-require_once '../config/config.php';
-
-Sesion::iniciar();
-
-if (!Sesion::estaLogueado()) {
-    header('Location: ' . BASE_URL . '/vistas/auth/login.php');
-    exit;
-}
-
-if (!Sesion::tieneAcceso('usuarios', 'editar')) {
-    die('No tiene permisos para modificar usuarios.');
-}
 
 $pdo = Conexion::obtenerInstancia()->obtenerPDO();
 
@@ -34,52 +21,52 @@ if (!$usuario) {
 $sqlRoles = "SELECT id, nombre FROM roles ORDER BY nombre";
 $roles = $pdo->query($sqlRoles)->fetchAll();
 
-include '../vistas/layout/header.php';
-include '../vistas/layout/sidebar.php';
-
 ?>
 
-<h2>Editar Usuario</h2>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Usuario</title>
 
-<div class="card-formulario">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-4">
+
+    <h2>Editar Usuario</h2>
 
     <form action="usuarios_actualizar.php" method="POST">
 
-        <input
-            type="hidden"
-            name="id"
-            value="<?= $usuario['id'] ?>">
+        <input type="hidden" name="id" value="<?= $usuario['id'] ?>">
 
-        <div class="grupo-formulario">
-
-            <label>Nombre del Usuario</label>
-
+        <div class="mb-3">
+            <label>Nombre</label>
             <input
                 type="text"
                 name="nombre"
+                class="form-control"
                 value="<?= htmlspecialchars($usuario['nombre']) ?>"
                 required>
-
         </div>
 
-        <div class="grupo-formulario">
-
-            <label>Correo Electrónico</label>
-
+        <div class="mb-3">
+            <label>Correo</label>
             <input
                 type="email"
                 name="correo"
+                class="form-control"
                 value="<?= htmlspecialchars($usuario['correo']) ?>"
                 required>
-
         </div>
 
-        <div class="grupo-formulario">
-
+        <div class="mb-3">
             <label>Rol</label>
 
             <select
                 name="rol_id"
+                class="form-control"
                 required>
 
                 <?php foreach($roles as $rol): ?>
@@ -98,32 +85,17 @@ include '../vistas/layout/sidebar.php';
 
         </div>
 
-        <div class="acciones-formulario">
+        <button class="btn btn-success">
+            Actualizar
+        </button>
 
-            <button
-                type="submit"
-                class="boton-login">
-
-                Actualizar Usuario
-
-            </button>
-
-            <a
-                href="usuarios_index.php"
-                class="boton-secundario">
-
-                Cancelar
-
-            </a>
-
-        </div>
+        <a href="usuarios_index.php" class="btn btn-secondary">
+            Cancelar
+        </a>
 
     </form>
 
 </div>
 
-</main>
-
-<?php
-include '../vistas/layout/footer.php';
-?>
+</body>
+</html>

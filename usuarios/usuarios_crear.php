@@ -1,88 +1,96 @@
 <?php
 
 require_once '../config/Conexion.php';
+require_once '../config/Sesion.php';
+require_once '../config/config.php';
+
+Sesion::iniciar();
+
+if (!Sesion::estaLogueado()) {
+    header('Location: ' . BASE_URL . '/vistas/auth/login.php');
+    exit;
+}
+
+if (!Sesion::tieneAcceso('usuarios', 'editar')) {
+    die('No tiene permisos para crear usuarios.');
+}
 
 $pdo = Conexion::obtenerInstancia()->obtenerPDO();
 
 /*
 Traemos todos los roles para llenar el select.
 */
-$sql = "SELECT id, nombre FROM roles ORDER BY nombre";
-$roles = $pdo->query($sql)->fetchAll();
+$sql = "
+SELECT
+    id,
+    nombre
+FROM roles
+ORDER BY nombre
+";
+
+$roles = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+
+include '../vistas/layout/header.php';
+include '../vistas/layout/sidebar.php';
 
 ?>
 
-<!DOCTYPE html>
+<h2>Registrar Usuario</h2>
 
-<html lang="es">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <title>Nuevo Usuario</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-</head>
-
-<body>
-
-<div class="container mt-4">
-
-    <h2>Registrar Usuario</h2>
+<div class="card-formulario">
 
     <form action="usuarios_guardar.php" method="POST">
 
-        <div class="mb-3">
+        <div class="grupo-formulario">
 
-            <label>Nombre</label>
+            <label>Nombre del Usuario</label>
 
             <input
                 type="text"
                 name="nombre"
-                class="form-control"
-                required>
+                required
+                pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,100}"
+                title="Ingrese únicamente letras y espacios. Mínimo 3 caracteres.">
 
         </div>
 
-        <div class="mb-3">
+        <div class="grupo-formulario">
 
-            <label>Correo</label>
+            <label>Correo Electrónico</label>
 
             <input
                 type="email"
                 name="correo"
-                class="form-control"
                 required>
 
         </div>
 
-        <div class="mb-3">
+        <div class="grupo-formulario">
 
             <label>Contraseña</label>
 
             <input
                 type="password"
                 name="contrasena"
-                class="form-control"
+                minlength="8"
                 required>
 
         </div>
 
-        <div class="mb-3">
+        <div class="grupo-formulario">
 
             <label>Rol</label>
 
             <select
                 name="rol_id"
-                class="form-control"
                 required>
 
-                <?php foreach($roles as $rol): ?>
+                <?php foreach ($roles as $rol): ?>
 
                     <option value="<?= $rol['id'] ?>">
+
                         <?= htmlspecialchars($rol['nombre']) ?>
+
                     </option>
 
                 <?php endforeach; ?>
@@ -91,18 +99,32 @@ $roles = $pdo->query($sql)->fetchAll();
 
         </div>
 
-        <button class="btn btn-success">
-            Guardar
-        </button>
+        <div class="acciones-formulario">
 
-        <a href="usuarios_index.php" class="btn btn-secondary">
-            Volver
-        </a>
+            <button
+                type="submit"
+                class="boton-login">
+
+                Registrar Usuario
+
+            </button>
+
+            <a
+                href="usuarios_index.php"
+                class="boton-secundario">
+
+                Cancelar
+
+            </a>
+
+        </div>
 
     </form>
 
 </div>
 
-</body>
+</main>
 
-</html>
+<?php
+include '../vistas/layout/footer.php';
+?>

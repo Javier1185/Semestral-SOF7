@@ -19,11 +19,19 @@ $pdo = Conexion::obtenerInstancia()->obtenerPDO();
 
 $id = $_GET['id'] ?? 0;
 
-$sql = "SELECT * FROM roles WHERE id = ?";
+$sql = "
+SELECT
+    id,
+    nombre
+FROM roles
+WHERE id = ?
+LIMIT 1
+";
+
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$id]);
 
-$rol = $stmt->fetch();
+$rol = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$rol) {
     die("Rol no encontrado.");
