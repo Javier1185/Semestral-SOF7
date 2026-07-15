@@ -2,7 +2,7 @@
 </div>
 
 <footer class="pie-pagina">
-    <p>&copy; <?= date('Y') ?> Sistema Contable - Proyecto académico UTP</p>
+    <p>&copy; <?= date('Y') ?> Sistema Contable - Proyecto Semestral</p>
 </footer>
 
 </body>
