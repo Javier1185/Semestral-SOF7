@@ -60,5 +60,10 @@
 /* Contenido que abre sidebar.php y que cierra footer.php */
 .contenido {
   flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;      /* ya NO auto: el contenido en sí no scrollea */
   padding: 1.8rem 2.2rem;
+  display: flex;
+  flex-direction: column;
 }

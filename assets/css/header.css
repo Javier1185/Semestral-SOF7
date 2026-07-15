@@ -42,5 +42,7 @@
 /* Contenedor que abre header.php y que cierra footer.php */
 .contenedor-principal {
   display: flex;
-  flex: 1 1 auto;
+  flex: 1;           /* toma el espacio restante debajo del <header> */
+  min-height: 0;      /* CLAVE: permite que los hijos con overflow funcionen dentro de un flex */
+  overflow: hidden;    /* nada se escapa de este contenedor hacia el body */
 }

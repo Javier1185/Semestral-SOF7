@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Iniciar sesión - Sistema Contable</title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/login/estilos.css">
+     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/estilo.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/header.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/barra.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/footer.css">
+</head>
 </head>
 <body class="pagina-login fondo-particulas">
 

@@ -1,57 +1,39 @@
+/* =========================================================
+   NOTA: las variables :root ya viven en base.css.
+   Si esta página también carga base.css, puedes borrar
+   este bloque de variables para no repetirlo dos veces.
+   Lo dejo aquí para que este archivo funcione solo si hace falta.
+   ========================================================= */
 :root{
-    /* ==========================================
-       FONDOS
-       ========================================== */
     --color-fondo: #F5F1EB;
     --color-superficie: #FFFFFF;
     --color-navbar: #FFFFFF;
 
-    /* ==========================================
-       SIDEBAR
-       ========================================== */
     --color-sidebar: #102A43;
     --color-sidebar-hover: #1B3B6F;
     --color-sidebar-activo: #16395D;
     --color-sidebar-texto: #F8FAFC;
 
-    /* ==========================================
-       COLORES PRINCIPALES
-       ========================================== */
     --color-primario: #102A43;
     --color-primario-hover: #1B3B6F;
     --color-primario-oscuro: #081C33;
 
-    /* ==========================================
-       DORADOS
-       ========================================== */
     --color-dorado: #B88A2A;
     --color-dorado-hover: #C69A36;
     --color-dorado-claro: #D9B45A;
 
-    /* ==========================================
-       TEXTO
-       ========================================== */
     --color-texto: #243447;
     --color-texto-suave: #6B7280;
     --color-texto-claro: #9CA3AF;
 
-    /* ==========================================
-       BORDES
-       ========================================== */
     --color-borde: #E5DDD2;
     --color-borde-hover: #D8C9B2;
 
-    /* ==========================================
-       ESTADOS
-       ========================================== */
     --color-success: #16A34A;
     --color-warning: #F59E0B;
     --color-danger: #DC2626;
     --color-info: #2563EB;
 
-    /* ==========================================
-       EFECTOS
-       ========================================== */
     --radio: 16px;
     --radio-pequeno: 10px;
     --sombra-suave: 0 8px 18px rgba(16,42,67,.08);
@@ -65,11 +47,18 @@
 
 html, body {
   height: 100%;
+  overflow: hidden;
 }
 
 * {
   box-sizing: border-box;
 }
+
+/* OJO: tenías dos versiones distintas de "body" en tus dos archivos.
+   Dejé esta (con overflow:hidden) porque parece la más reciente,
+   pero si alguna tabla larga (como el Diario General) se ve cortada
+   sin poder hacer scroll, este es el motivo — avísame y la cambiamos
+   por la versión sin overflow:hidden. */
 body {
     margin: 0;
     height: 100vh;
@@ -91,7 +80,9 @@ a:hover {
   text-decoration: underline;
 }
 
-/* ---------- Alertas (usadas en varias pantallas, no solo layout) ---------- */
+/* =========================================================
+   ALERTAS
+   ========================================================= */
 .alerta {
   padding: 0.6rem 0.8rem;
   border-radius: var(--radio-pequeno);
@@ -122,424 +113,311 @@ a:hover {
   background: rgba(37, 99, 235, 0.1);
   color: var(--color-info);
   border-color: var(--color-info);
-
-.hero{
-
-    width:100%;
-    max-width:1100px;
-    margin:40px auto 20px auto;
-    padding:0 20px;
-
 }
 
-.hero h1{
-
-    font-size:52px;
-    color:var(--color-primario);
-    line-height:1.15;
-    margin-bottom:20px;
-
+/* =========================================================
+   PÁGINA PÚBLICA (landing)
+   ========================================================= */
+.hero {
+  width: 100%;
+  max-width: 1100px;
+  margin: 40px auto 20px auto;
+  padding: 0 20px;
 }
 
-.hero p{
-
-    font-size:22px;
-    color:var(--color-texto-suave);
-    line-height:1.8;
-
+.hero h1 {
+  font-size: 52px;
+  color: var(--color-primario);
+  line-height: 1.15;
+  margin-bottom: 20px;
 }
 
-.beneficios{
-
-    width:100%;
-    max-width:1100px;
-
-    margin:50px auto;
-
-    display:grid;
-
-    grid-template-columns:repeat(3,1fr);
-
-    gap:30px;
-
+.hero p {
+  font-size: 22px;
+  color: var(--color-texto-suave);
+  line-height: 1.8;
 }
 
-.tarjeta{
-
-    background:#fff;
-
-    border-radius:18px;
-
-    padding:28px;
-
-    box-shadow:0 8px 22px rgba(0,0,0,.08);
-
-    border:1px solid #ececec;
-
-    transition:.30s;
-
+.beneficios {
+  width: 100%;
+  max-width: 1100px;
+  margin: 50px auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
 }
 
-.tarjeta:hover{
-
-    transform:translateY(-6px);
-
-}
-
-.tarjeta h2{
-
-    margin-bottom:15px;
-
-    color:var(--color-primario);
-
-}
-
-.tarjeta p{
-
-    line-height:1.7;
-
-    color:#555;
-
-}
-
-@media(max-width:1000px){
-
-.beneficios{
-
-grid-template-columns:1fr;
-
-}
-
-.hero h1{
-
-font-size:40px;
-
-}
-
-.hero p{
-
-font-size:18px;
-
-}
-
-}
+/* Unifiqué las dos versiones de .tarjeta que tenías en un solo bloque */
 .beneficios .tarjeta {
   background: var(--color-superficie);
-  border: 1px solid var(--color-borde);
-  border-radius: var(--radio);
-  padding: 1.3rem;
+  border-radius: 18px;
+  padding: 28px;
   box-shadow: var(--sombra-suave);
-  transition: border-color var(--transicion), box-shadow var(--transicion);
+  border: 1px solid var(--color-borde);
+  transition: transform .3s, border-color var(--transicion), box-shadow var(--transicion);
 }
 
 .beneficios .tarjeta:hover {
+  transform: translateY(-6px);
   border-color: var(--color-dorado);
   box-shadow: var(--sombra-hover);
 }
 
 .beneficios .tarjeta h2 {
+  margin-bottom: 15px;
   font-size: 1.05rem;
-  margin: 0 0 0.4rem;
   color: var(--color-primario);
 }
 
 .beneficios .tarjeta p {
   margin: 0;
+  line-height: 1.7;
   color: var(--color-texto-suave);
   font-size: 0.9rem;
 }
 
-/* ===========================================================
-   COMPONENTES DEL SISTEMA (TABLAS - BOTONES - FORMULARIOS)
-
-.d-flex
-
-.card{
-    background:#fff;
-    border-radius:16px;
-    box-shadow:0 8px 18px rgba(16,42,67,.08);
-    border:1px solid var(--color-borde);
-    margin-bottom:25px;
-    overflow:hidden;
+@media (max-width: 1000px) {
+  .beneficios {
+    grid-template-columns: 1fr;
+  }
+  .hero h1 {
+    font-size: 40px;
+  }
+  .hero p {
+    font-size: 18px;
+  }
 }
 
-.card-header{
-    background:var(--color-primario);
-    color:#fff;
-    padding:15px 20px;
-    font-size:20px;
-    font-weight:600;
+/* =========================================================
+   COMPONENTES DEL SISTEMA (tarjetas, botones, tablas, formularios, badges)
+   ========================================================= */
+
+.d-flex {
+  display: flex;
 }
 
-.card-body{
-    padding:20px;
+.card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: var(--sombra-suave);
+  border: 1px solid var(--color-borde);
+  margin-bottom: 25px;
+  overflow: hidden;
 }
 
-
-
-.justify-content-between{
-    justify-content:space-between;
+.card-header {
+  background: var(--color-primario);
+  color: #fff;
+  padding: 15px 20px;
+  font-size: 20px;
+  font-weight: 600;
 }
 
-.align-items-center{
-    align-items:center;
+.card-body {
+  padding: 20px;
 }
 
-.mb-3{
-    margin-bottom:20px;
+.justify-content-between {
+  justify-content: space-between;
 }
 
-.mt-4{
-    margin-top:25px;
+.align-items-center {
+  align-items: center;
 }
 
-/*==========================
-BOTONES
-
-.btn{
-    display:inline-block;
-    padding:10px 18px;
-    border:none;
-    border-radius:10px;
-    text-decoration:none;
-    cursor:pointer;
-    transition:.25s;
-    font-size:14px;
-    font-weight:600;
-    color:#fff;
+.mb-3 {
+  margin-bottom: 20px;
 }
 
-.btn:hover{
-    transform:translateY(-2px);
-    text-decoration:none;
+.mt-4 {
+  margin-top: 25px;
 }
 
-.btn-primary{
-    background:#2563eb;
+/* ---------- Botones ---------- */
+.btn {
+  display: inline-block;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 10px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: .25s;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
 }
 
-.btn-primary:hover{
-    background:#1d4ed8;
+.btn:hover {
+  transform: translateY(-2px);
+  text-decoration: none;
 }
 
-.btn-success{
-    background:#16a34a;
+.btn-primary { background: #2563eb; }
+.btn-primary:hover { background: #1d4ed8; }
+
+.btn-success { background: #16a34a; }
+.btn-success:hover { background: #15803d; }
+
+.btn-danger { background: #dc2626; }
+.btn-danger:hover { background: #b91c1c; }
+
+.btn-warning { background: #f59e0b; }
+.btn-warning:hover { background: #d97706; }
+
+.btn-info { background: #0891b2; }
+.btn-info:hover { background: #0e7490; }
+
+.btn-secondary { background: #6b7280; }
+.btn-secondary:hover { background: #4b5563; }
+
+.btn-sm {
+  padding: 7px 12px;
+  font-size: 13px;
 }
 
-.btn-success:hover{
-    background:#15803d;
+/* ---------- Tablas ---------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
 }
 
-.btn-danger{
-    background:#dc2626;
+/* Envuelve una tabla larga para que haga scroll propio sin
+   depender del scroll de la página (recuerda que body tiene
+   overflow:hidden). El encabezado queda fijo mientras bajas. */
+.tabla-scroll {
+  max-height: 65vh;
+  overflow: auto;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-pequeno);
 }
 
-.btn-danger:hover{
-    background:#b91c1c;
+.tabla-scroll table {
+  margin: 0;
 }
 
-.btn-warning{
-    background:#f59e0b;
+.tabla-scroll thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
-.btn-warning:hover{
-    background:#d97706;
+.table {
+  width: 100%;
 }
 
-.btn-info{
-    background:#0891b2;
+.table th {
+  background: var(--color-primario);
+  color: #fff;
+  padding: 13px;
+  text-align: left;
 }
 
-.btn-info:hover{
-    background:#0e7490;
+.table td {
+  padding: 12px;
+  border-bottom: 1px solid #ececec;
 }
 
-.btn-secondary{
-    background:#6b7280;
+.table tr:nth-child(even) {
+  background: #fafafa;
 }
 
-.btn-secondary:hover{
-    background:#4b5563;
+.table tr:hover {
+  background: #eef4ff;
 }
 
-.btn-sm{
-    padding:7px 12px;
-    font-size:13px;
+.table-bordered {
+  border: 1px solid #ddd;
 }
 
-/*==========================
-TABLAS
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    background:#fff;
+.table-hover tbody tr:hover {
+  background: #edf4ff;
 }
 
-.table{
-    width:100%;
-}
-
-.table th{
-
-    background:var(--color-primario);
-    color:#fff;
-    padding:13px;
-    text-align:left;
-
-}
-
-.table td{
-
-    padding:12px;
-    border-bottom:1px solid #ececec;
-
-}
-
-.table tr:nth-child(even){
-
-    background:#fafafa;
-
-}
-
-.table tr:hover{
-
-    background:#eef4ff;
-
-}
-
-.table-bordered{
-
-    border:1px solid #ddd;
-
-}
-
-.table-hover tbody tr:hover{
-
-    background:#edf4ff;
-
-}
-
-/*==========================
-FORMULARIOS
-
-label{
-
-    display:block;
-    margin-bottom:6px;
-    font-weight:600;
-
+/* ---------- Formularios ---------- */
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
 }
 
 input,
 select,
-textarea{
-
-    width:100%;
-    padding:11px;
-    border:1px solid #d7d7d7;
-    border-radius:10px;
-    margin-bottom:16px;
-    font-size:15px;
-
+textarea {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #d7d7d7;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  font-size: 15px;
 }
 
 input:focus,
 select:focus,
-textarea:focus{
-
-    outline:none;
-    border-color:#2563eb;
-    box-shadow:0 0 0 3px rgba(37,99,235,.15);
-
+textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .15);
 }
 
-textarea{
-
-    resize:vertical;
-
+textarea {
+  resize: vertical;
 }
 
-/*==========================
-BADGES
-
-.badge{
-
-    display:inline-block;
-    padding:5px 10px;
-    border-radius:20px;
-    font-size:12px;
-    font-weight:bold;
-
+/* ---------- Badges ---------- */
+.badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
 }
 
-.bg-success{
+.bg-success { background: #16a34a; color: #fff; }
+.bg-danger  { background: #dc2626; color: #fff; }
+.bg-warning { background: #f59e0b; color: #fff; }
+.bg-info    { background: #2563eb; color: #fff; }
 
-    background:#16a34a;
-    color:white;
-
+/* ---------- Responsive del layout (sidebar / contenido) ---------- */
+@media (max-width: 900px) {
+  .barra-lateral {
+    width: 190px;
+  }
+  .contenido {
+    padding: 20px;
+  }
 }
 
-.bg-danger{
-
-    background:#dc2626;
-    color:white;
-
+@media (max-width: 700px) {
+  .contenedor-principal {
+    flex-direction: column;
+  }
+  .barra-lateral {
+    width: 100%;
+    flex-direction: row;
+    overflow: auto;
+  }
+  .barra-lateral a {
+    white-space: nowrap;
+  }
+}
+.contenido > .container {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-.bg-warning{
-
-    background:#f59e0b;
-    color:white;
-
+.contenido .card {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-.bg-info{
-
-    background:#2563eb;
-    color:white;
-
-}
-
-/*==========================
-RESPONSIVE
-
-@media(max-width:900px){
-
-.barra-lateral{
-
-    width:190px;
-
-}
-
-.contenido{
-
-    padding:20px;
-
-}
-
-}
-
-@media(max-width:700px){
-
-.contenedor-principal{
-
-    flex-direction:column;
-
-}
-
-.barra-lateral{
-
-    width:100%;
-    flex-direction:row;
-    overflow:auto;
-
-}
-
-.barra-lateral a{
-
-    white-space:nowrap;
-
-}
-
+.contenido .tabla-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  max-height: none; /* ya no depende de un 65vh fijo, se ajusta al espacio real disponible */
 }
