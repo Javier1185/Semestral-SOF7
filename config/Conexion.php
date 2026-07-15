@@ -12,7 +12,7 @@ class Conexion
     private string $contrasena = '';
     private string $charset = 'utf8mb4';
 
-  
+    // El constructor es privado: nadie puede hacer "new Conexion()" desde afuera.
     private function __construct()
     {
         $dsn = "mysql:host={$this->host};dbname={$this->baseDatos};charset={$this->charset}";

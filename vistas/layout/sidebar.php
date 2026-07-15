@@ -2,7 +2,9 @@
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/../../config/Sesion.php';
 ?>
+
 <nav class="barra-lateral">
+
     <a href="<?= BASE_URL ?>/index.php">Inicio</a>
 
     <?php if (Sesion::tieneAcceso('usuarios')): ?>
@@ -24,6 +26,11 @@ require_once __DIR__ . '/../../config/Sesion.php';
     <?php if (Sesion::tieneAcceso('informes')): ?>
         <a href="<?= BASE_URL ?>/Controladores/InformeController.php">Informes</a>
     <?php endif; ?>
+
+    <?php if (Sesion::tieneAcceso('bitacora')): ?>
+        <a href="<?= BASE_URL ?>/bitacora/bitacora_index.php">Bitácora</a>
+    <?php endif; ?>
+
 </nav>
 
 <main class="contenido">

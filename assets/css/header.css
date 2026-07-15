@@ -1,0 +1,48 @@
+/* ---------- Barra superior (header interno y público) ---------- */
+.barra-superior {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.5rem;
+  background: var(--color-navbar);
+  border-bottom: 1px solid var(--color-borde);
+  box-shadow: var(--sombra-suave);
+}
+
+.barra-superior .marca {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--color-primario);
+}
+
+.info-usuario {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: var(--color-texto-suave);
+}
+
+.boton-login {
+  background: var(--color-primario);
+  color: var(--color-sidebar-texto) !important;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--radio-pequeno);
+  transition: background var(--transicion);
+}
+
+.boton-login:hover {
+  background: var(--color-dorado);
+  color: var(--color-sidebar-texto) !important;
+}
+
+/* Contenedor que abre header.php y que cierra footer.php */
+.contenedor-principal {
+  display: flex;
+  flex: 1;           /* toma el espacio restante debajo del <header> */
+  min-height: 0;      /* CLAVE: permite que los hijos con overflow funcionen dentro de un flex */
+  overflow: hidden;    /* nada se escapa de este contenedor hacia el body */
+}

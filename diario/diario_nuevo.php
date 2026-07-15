@@ -1,183 +1,160 @@
 <?php
 
-require_once '../config/conexion.php';
+require_once '../config/Conexion.php';
 
 $pdo = Conexion::obtenerInstancia()->obtenerPDO();
 
 $cuentas = $pdo->query("
-SELECT id,codigo,nombre
-FROM cuentas
-WHERE activo=1
-ORDER BY codigo
+    SELECT id, codigo, nombre
+    FROM cuentas
+    WHERE activo = 1
+    ORDER BY codigo
 ")->fetchAll();
 
+require_once '../vistas/layout/header.php';
+require_once '../vistas/layout/sidebar.php';
 ?>
-
-<!DOCTYPE html>
-
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>Nuevo Asiento</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<script>
-function agregarFila(){
-
-const tabla =
-document.getElementById("detalle");
-
-const fila =
-tabla.insertRow();
-
-fila.innerHTML = `
-<td>
-
-<select
-name="cuenta_id[]"
-class="form-control"
-required>
-
-<?php foreach($cuentas as $c): ?>
-
-<option value="<?= $c['id'] ?>">
-<?= $c['codigo'] ?> - <?= $c['nombre'] ?>
-</option>
-
-<?php endforeach; ?>
-
-</select>
-
-</td>
-
-<td>
-<input
-type="number"
-step="0.01"
-name="debito[]"
-class="form-control"
-value="0">
-</td>
-
-<td>
-<input
-type="number"
-step="0.01"
-name="credito[]"
-class="form-control"
-value="0">
-</td>
-`;
-}
-</script>
-
-</head>
-
-<body>
 
 <div class="container mt-4">
 
-<h2>Nuevo Asiento</h2>
+    <h2>Nuevo Asiento</h2>
 
-<form action="diario_guardar.php" method="POST">
+    <form action="diario_guardar.php" method="POST">
 
-<div class="mb-3">
+        <div class="mb-3">
+            <label>Fecha</label>
+            <input
+                type="date"
+                name="fecha"
+                class="form-control"
+                required>
+        </div>
 
-<label>Fecha</label>
+        <div class="mb-3">
+            <label>Descripción</label>
+            <input
+                type="text"
+                name="descripcion"
+                class="form-control"
+                required>
+        </div>
 
-<input
-type="date"
-name="fecha"
-class="form-control"
-required>
+        <table class="table table-bordered">
 
-</div>
+            <thead>
+                <tr>
+                    <th>Cuenta</th>
+                    <th>Débito</th>
+                    <th>Crédito</th>
+                </tr>
+            </thead>
 
-<div class="mb-3">
+            <tbody id="detalle">
 
-<label>Descripción</label>
+                <tr>
 
-<input
-type="text"
-name="descripcion"
-class="form-control"
-required>
+                    <td>
+                        <select
+                            name="cuenta_id[]"
+                            class="form-control"
+                            required>
 
-</div>
+                            <?php foreach($cuentas as $cuenta): ?>
 
-<table class="table table-bordered">
+                                <option value="<?= $cuenta['id'] ?>">
+                                    <?= $cuenta['codigo'] ?> - <?= htmlspecialchars($cuenta['nombre']) ?>
+                                </option>
 
-<thead>
+                            <?php endforeach; ?>
 
-<tr>
-<th>Cuenta</th>
-<th>Débito</th>
-<th>Crédito</th>
-</tr>
+                        </select>
+                    </td>
 
-</thead>
+                    <td>
+                        <input
+                            type="number"
+                            step="0.01"
+                            name="debito[]"
+                            class="form-control"
+                            value="0">
+                    </td>
 
-<tbody id="detalle">
+                    <td>
+                        <input
+                            type="number"
+                            step="0.01"
+                            name="credito[]"
+                            class="form-control"
+                            value="0">
+                    </td>
 
-<tr>
+                </tr>
 
-<td>
+            </tbody>
 
-<select
-name="cuenta_id[]"
-class="form-control">
+        </table>
 
-<?php foreach($cuentas as $c): ?>
+        <button
+            type="button"
+            class="btn btn-secondary"
+            onclick="agregarFila()">
+            Agregar Línea
+        </button>
 
-<option value="<?= $c['id'] ?>">
-<?= $c['codigo'] ?> - <?= $c['nombre'] ?>
-</option>
+        <button
+            type="submit"
+            class="btn btn-success">
+            Guardar Asiento
+        </button>
 
-<?php endforeach; ?>
-
-</select>
-
-</td>
-
-<td>
-<input
-type="number"
-step="0.01"
-name="debito[]"
-class="form-control"
-value="0">
-</td>
-
-<td>
-<input
-type="number"
-step="0.01"
-name="credito[]"
-class="form-control"
-value="0">
-</td>
-
-</tr>
-
-</tbody>
-
-</table>
-
-<button
-type="button"
-class="btn btn-secondary"
-onclick="agregarFila()">
-Agregar Línea </button>
-
-<button
-type="submit"
-class="btn btn-success">
-Guardar Asiento </button>
-
-</form>
+    </form>
 
 </div>
 
-</body>
-</html>
+<script>
+
+function agregarFila() {
+
+    const tabla = document.getElementById("detalle");
+
+    const fila = tabla.insertRow();
+
+    fila.innerHTML = `
+        <td>
+            <select
+                name="cuenta_id[]"
+                class="form-control"
+                required>
+
+                <?php foreach($cuentas as $cuenta): ?>
+                    <option value="<?= $cuenta['id'] ?>">
+                        <?= $cuenta['codigo'] ?> - <?= htmlspecialchars($cuenta['nombre']) ?>
+                    </option>
+                <?php endforeach; ?>
+
+            </select>
+        </td>
+
+        <td>
+            <input
+                type="number"
+                step="0.01"
+                name="debito[]"
+                class="form-control"
+                value="0">
+        </td>
+
+        <td>
+            <input
+                type="number"
+                step="0.01"
+                name="credito[]"
+                class="form-control"
+                value="0">
+        </td>
+    `;
+}
+
+</script>
+
+<?php require_once '../vistas/layout/footer.php'; ?>
