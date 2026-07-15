@@ -1,93 +1,110 @@
 <?php
-
 require_once '../config/Conexion.php';
 
-$pdo = Conexion::obtenerInstancia()->obtenerPDO();
+try {
 
-$sql = "
-SELECT
-    d.id,
-    d.fecha,
-    d.descripcion,
-    d.estado,
-    u.nombre AS usuario
-FROM diario d
-INNER JOIN usuarios u
-ON d.usuario_id = u.id
-ORDER BY d.fecha DESC
-";
+    $pdo = Conexion::obtenerInstancia()->obtenerPDO();
 
-$diarios = $pdo->query($sql)->fetchAll();
+    $sql = "SELECT
+                d.id,
+                d.fecha,
+                d.descripcion,
+                d.estado,
+                u.nombre AS usuario
+            FROM diario d
+            LEFT JOIN usuarios u
+                ON d.usuario_id = u.id
+            ORDER BY d.fecha DESC";
 
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+
+    $diarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+} catch (PDOException $e) {
+    die("Error: " . $e->getMessage());
+}
+
+require_once '../vistas/layout/header.php';
+require_once '../vistas/layout/sidebar.php';
 ?>
-
-<?php require_once '../vistas/layout/header.php'; ?>
-<?php require_once '../vistas/layout/sidebar.php'; ?>
 
 <div class="container mt-4">
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
+<div class="d-flex justify-content-between align-items-center mb-3">
 
-        <h2>Diario General</h2>
+<h2>Diario General</h2>
 
-        <div>
-            <a href="diario_nuevo.php" class="btn btn-primary">
-                Nuevo Asiento
-            </a>
+<div>
 
-            <a href="../bitacora/bitacora_index.php" class="btn btn-info">
-                Ver Bitácora
-            </a>
-        </div>
+<a href="diario_nuevo.php" class="btn btn-primary">
+Nuevo Asiento
+</a>
 
-    </div>
+<a href="../bitacora/bitacora_index.php" class="btn btn-info">
+Ver Bitácora
+</a>
 
-    <table class="table table-bordered table-hover">
+</div>
 
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Fecha</th>
-                <th>Descripción</th>
-                <th>Usuario</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
+</div>
 
-        <tbody>
+<table class="table table-bordered table-hover">
 
-        <?php foreach($diarios as $d): ?>
+<thead class="table-dark">
+<tr>
+<th>ID</th>
+<th>Fecha</th>
+<th>Descripción</th>
+<th>Usuario</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
 
-            <tr>
+<tbody>
 
-                <td><?= $d['id'] ?></td>
+<?php if(count($diarios)>0): ?>
 
-                <td><?= htmlspecialchars($d['fecha']) ?></td>
+<?php foreach($diarios as $d): ?>
 
-                <td><?= htmlspecialchars($d['descripcion']) ?></td>
+<tr>
 
-                <td><?= htmlspecialchars($d['usuario']) ?></td>
+<td><?= $d['id'] ?></td>
 
-                <td><?= htmlspecialchars($d['estado']) ?></td>
+<td><?= htmlspecialchars($d['fecha']) ?></td>
 
-                <td>
+<td><?= htmlspecialchars($d['descripcion']) ?></td>
 
-                    <a
-                        href="diario_ver.php?id=<?= $d['id'] ?>"
-                        class="btn btn-info btn-sm">
-                        Ver
-                    </a>
+<td><?= htmlspecialchars($d['usuario'] ?? '') ?></td>
 
-                </td>
+<td><?= htmlspecialchars($d['estado']) ?></td>
 
-            </tr>
+<td>
 
-        <?php endforeach; ?>
+<a href="diario_ver.php?id=<?= $d['id'] ?>" class="btn btn-info btn-sm">
+Ver
+</a>
 
-        </tbody>
+</td>
 
-    </table>
+</tr>
+
+<?php endforeach; ?>
+
+<?php else: ?>
+
+<tr>
+<td colspan="6" class="text-center">
+No existen asientos registrados.
+</td>
+</tr>
+
+<?php endif; ?>
+
+</tbody>
+
+</table>
 
 </div>
 
