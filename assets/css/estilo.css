@@ -2,52 +2,45 @@
     /* ==========================================
        FONDOS
        ========================================== */
-    /* Fondo general (crema elegante) */
     --color-fondo: #F5F1EB;
-    /* Tarjetas */
     --color-superficie: #FFFFFF;
-    /* Navbar */
     --color-navbar: #FFFFFF;
+
     /* ==========================================
        SIDEBAR
        ========================================== */
-    /* Azul marino principal */
     --color-sidebar: #102A43;
-    /* Hover del menú */
     --color-sidebar-hover: #1B3B6F;
-    /* Menú activo */
     --color-sidebar-activo: #16395D;
-    /* Texto del sidebar */
     --color-sidebar-texto: #F8FAFC;
+
     /* ==========================================
        COLORES PRINCIPALES
        ========================================== */
-    /* Azul principal */
     --color-primario: #102A43;
-    /* Hover */
     --color-primario-hover: #1B3B6F;
-    /* Azul más oscuro */
     --color-primario-oscuro: #081C33;
+
     /* ==========================================
        DORADOS
        ========================================== */
-    /* Oro mate */
     --color-dorado: #B88A2A;
-    /* Hover */
     --color-dorado-hover: #C69A36;
-    /* Oro claro */
     --color-dorado-claro: #D9B45A;
+
     /* ==========================================
        TEXTO
        ========================================== */
     --color-texto: #243447;
     --color-texto-suave: #6B7280;
     --color-texto-claro: #9CA3AF;
+
     /* ==========================================
        BORDES
        ========================================== */
     --color-borde: #E5DDD2;
     --color-borde-hover: #D8C9B2;
+
     /* ==========================================
        ESTADOS
        ========================================== */
@@ -55,6 +48,7 @@
     --color-warning: #F59E0B;
     --color-danger: #DC2626;
     --color-info: #2563EB;
+
     /* ==========================================
        EFECTOS
        ========================================== */
@@ -97,126 +91,7 @@ a:hover {
   text-decoration: underline;
 }
 
-/* ---------- Barra superior (header interno y público) ---------- */
-.barra-superior {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.9rem 1.5rem;
-  background: var(--color-navbar);
-  border-bottom: 1px solid var(--color-borde);
-  box-shadow: var(--sombra-suave);
-}
-
-.barra-superior .marca {
-  font-weight: 600;
-  font-size: 1.1rem;
-  color: var(--color-primario);
-}
-
-.info-usuario {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-size: 0.9rem;
-  color: var(--color-texto-suave);
-}
-
-.boton-login {
-  background: var(--color-primario);
-  color: var(--color-sidebar-texto) !important;
-  padding: 0.5rem 1.1rem;
-  border-radius: var(--radio-pequeno);
-  transition: background var(--transicion);
-}
-
-.boton-login:hover {
-  background: var(--color-dorado);
-  color: var(--color-sidebar-texto) !important;
-}
-
-/* ---------- Layout interno (sidebar + contenido) ---------- */
-.contenedor-principal {
-  display: flex;
-  flex: 1 1 auto;
-}
-
-.barra-lateral {
-  width: 220px;
-  background: var(--color-sidebar);
-  border-right: 1px solid var(--color-primario-oscuro);
-  padding: 1.2rem 0.8rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.barra-lateral a {
-  position: relative;
-  padding: 0.7rem 0.8rem;
-  border-radius: var(--radio-pequeno);
-  color: var(--color-sidebar-texto);
-  border-bottom: 1px solid rgba(184, 138, 42, 0.18);
-  overflow: hidden;
-  transition: background var(--transicion-suave), color var(--transicion-suave), padding-left var(--transicion-suave);
-}
-
-.barra-lateral a:last-child {
-  border-bottom: none;
-}
-
-/* Barrita dorada que crece desde el centro al pasar el cursor */
-.barra-lateral a::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 3px;
-  background: var(--color-dorado);
-  transform: scaleY(0);
-  transition: transform var(--transicion-suave);
-}
-
-.barra-lateral a:hover {
-  background: rgba(184, 138, 42, 0.12);
-  color: var(--color-dorado-claro);
-  padding-left: 1.2rem;
-  text-decoration: none;
-}
-
-.barra-lateral a:hover::before {
-  transform: scaleY(1);
-}
-
-.barra-lateral a.activo {
-  background: rgba(184, 138, 42, 0.18);
-  color: var(--color-dorado-claro);
-  padding-left: 1.2rem;
-}
-
-.barra-lateral a.activo::before {
-  transform: scaleY(1);
-}
-
-.contenido {
-  flex: 1;
-  padding: 1.8rem 2.2rem;
-}
-
-.pie-pagina {
-  text-align: center;
-  padding: 0.5rem 1rem;
-  font-size: 0.75rem;
-  color: var(--color-texto-suave);
-  background: var(--color-superficie);
-  border-top: 1px solid var(--color-borde);
-}
-
-/* ---------- Alertas ---------- */
+/* ---------- Alertas (usadas en varias pantallas, no solo layout) ---------- */
 .alerta {
   padding: 0.6rem 0.8rem;
   border-radius: var(--radio-pequeno);
@@ -247,57 +122,4 @@ a:hover {
   background: rgba(37, 99, 235, 0.1);
   color: var(--color-info);
   border-color: var(--color-info);
-}
-
-/* ---------- Página pública ---------- */
-.pagina-publica .hero {
-  max-width: 720px;
-  margin: 3rem auto 2rem;
-  padding: 0 1.5rem;
-  text-align: center;
-}
-
-.pagina-publica .hero h1 {
-  font-size: 1.8rem;
-  color: var(--color-primario);
-}
-
-.pagina-publica .hero p {
-  color: var(--color-texto-suave);
-  line-height: 1.5;
-}
-
-.beneficios {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.2rem;
-  max-width: 900px;
-  margin: 0 auto 3rem;
-  padding: 0 1.5rem;
-}
-
-.beneficios .tarjeta {
-  background: var(--color-superficie);
-  border: 1px solid var(--color-borde);
-  border-radius: var(--radio);
-  padding: 1.3rem;
-  box-shadow: var(--sombra-suave);
-  transition: border-color var(--transicion), box-shadow var(--transicion);
-}
-
-.beneficios .tarjeta:hover {
-  border-color: var(--color-dorado);
-  box-shadow: var(--sombra-hover);
-}
-
-.beneficios .tarjeta h2 {
-  font-size: 1.05rem;
-  margin: 0 0 0.4rem;
-  color: var(--color-primario);
-}
-
-.beneficios .tarjeta p {
-  margin: 0;
-  color: var(--color-texto-suave);
-  font-size: 0.9rem;
 }

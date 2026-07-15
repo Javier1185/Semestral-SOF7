@@ -1,0 +1,64 @@
+/* ---------- Barra lateral (sidebar.php) ---------- */
+.barra-lateral {
+  width: 220px;
+  background: var(--color-sidebar);
+  border-right: 1px solid var(--color-primario-oscuro);
+  padding: 1.2rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.barra-lateral a {
+  position: relative;
+  padding: 0.7rem 0.8rem;
+  border-radius: var(--radio-pequeno);
+  color: var(--color-sidebar-texto);
+  border-bottom: 1px solid rgba(184, 138, 42, 0.18);
+  overflow: hidden;
+  transition: background var(--transicion-suave), color var(--transicion-suave), padding-left var(--transicion-suave);
+}
+
+.barra-lateral a:last-child {
+  border-bottom: none;
+}
+
+/* Barrita dorada que crece desde el centro al pasar el cursor */
+.barra-lateral a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 3px;
+  background: var(--color-dorado);
+  transform: scaleY(0);
+  transition: transform var(--transicion-suave);
+}
+
+.barra-lateral a:hover {
+  background: rgba(184, 138, 42, 0.12);
+  color: var(--color-dorado-claro);
+  padding-left: 1.2rem;
+  text-decoration: none;
+}
+
+.barra-lateral a:hover::before {
+  transform: scaleY(1);
+}
+
+.barra-lateral a.activo {
+  background: rgba(184, 138, 42, 0.18);
+  color: var(--color-dorado-claro);
+  padding-left: 1.2rem;
+}
+
+.barra-lateral a.activo::before {
+  transform: scaleY(1);
+}
+
+/* Contenido que abre sidebar.php y que cierra footer.php */
+.contenido {
+  flex: 1;
+  padding: 1.8rem 2.2rem;
+}
