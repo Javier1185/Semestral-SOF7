@@ -16,9 +16,9 @@
     <div class="caja-login">
         <h1>Sistema Contable</h1>
         <p class="subtitulo">Inicia sesión para continuar</p>
-
+        
         <?php if (!empty($error)): ?>
-            <div class="alerta alerta-error"><?= htmlspecialchars($error) ?></div>
+            <div class="alerta alerta-error"><?= Sanitizar::paraSalidaHtml($error) ?></div>
         <?php endif; ?>
 
         <form method="POST" action="<?= BASE_URL ?>/controladores/AuthController.php">
